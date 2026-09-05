@@ -1,4 +1,4 @@
-package org.example.smartqueue.mapstruct;
+package org.example.smartqueue.mapper;
 
 import org.example.smartqueue.dto.request.RegisterRequestDTO;
 import org.example.smartqueue.dto.response.ClientResponseDTO;

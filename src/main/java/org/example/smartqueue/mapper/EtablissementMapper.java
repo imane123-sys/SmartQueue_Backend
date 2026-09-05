@@ -1,4 +1,4 @@
-package org.example.smartqueue.mapstruct;
+package org.example.smartqueue.mapper;
 
 import org.example.smartqueue.dto.request.EtablissementRequestDTO;
 import org.example.smartqueue.dto.response.EtablissementResponseDTO;
@@ -16,8 +16,12 @@ public interface EtablissementMapper {
     EtablissementResponseDTO toResponseDTO(Etablissement etablissement);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "role", ignore = true)
+    @Mapping(target = "password", ignore = true)
     Etablissement toEntity(EtablissementRequestDTO requestDTO);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "role", ignore = true)
+    @Mapping(target = "password", ignore = true)
     void updateEntityFromDto(EtablissementRequestDTO requestDTO, @MappingTarget Etablissement etablissement);
 }

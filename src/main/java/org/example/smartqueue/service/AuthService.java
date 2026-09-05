@@ -1,6 +1,5 @@
 package org.example.smartqueue.service;
 
-
 import lombok.RequiredArgsConstructor;
 import org.example.smartqueue.dto.request.EtablissementRequestDTO;
 import org.example.smartqueue.dto.request.LoginRequestDTO;
@@ -9,8 +8,8 @@ import org.example.smartqueue.dto.response.AuthResponseDTO;
 import org.example.smartqueue.entity.Client;
 import org.example.smartqueue.entity.Etablissement;
 import org.example.smartqueue.enums.Role;
-import org.example.smartqueue.mapstruct.ClientMapper;
-import org.example.smartqueue.mapstruct.EtablissementMapper;
+import org.example.smartqueue.mapper.ClientMapper;
+import org.example.smartqueue.mapper.EtablissementMapper;
 import org.example.smartqueue.repository.ClientRepository;
 import org.example.smartqueue.repository.EtablissementRepository;
 import org.example.smartqueue.repository.UserRepository;
