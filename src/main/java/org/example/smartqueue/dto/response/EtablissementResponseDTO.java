@@ -1,5 +1,6 @@
 package org.example.smartqueue.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +16,9 @@ public class EtablissementResponseDTO implements Serializable {
     private String type;
     private double latitude;
     private double longitude;
+    @JsonFormat(pattern = "HH:mm", shape = JsonFormat.Shape.STRING)
     private LocalTime horaireOuverture;
+    @JsonFormat(pattern = "HH:mm", shape = JsonFormat.Shape.STRING)
     private LocalTime horaireFermeture;
 
     private double distanceKm;
