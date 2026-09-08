@@ -1,12 +1,11 @@
 package org.example.smartqueue.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.PrimaryKeyJoinColumn;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "etablissements")
@@ -18,9 +17,6 @@ import java.time.LocalTime;
 public class Etablissement extends User {
 
     @Column(nullable = false)
-    private String nom;
-
-    @Column(nullable = false)
     private String adresse;
 
     private String telephone;
@@ -30,4 +26,6 @@ public class Etablissement extends User {
 
     private LocalTime horaireOuverture;
     private LocalTime horaireFermeture;
+    @OneToMany(mappedBy ="etablissement" )
+    private List<Services> services= new ArrayList<>();
 }

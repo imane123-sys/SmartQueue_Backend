@@ -11,13 +11,27 @@ import java.util.List;
 @Repository
 public interface EtablissementRepository extends JpaRepository<Etablissement, Long> {
 
-    List<Etablissement> findByNomContainingIgnoreCaseOrAdresseContainingIgnoreCase(String nom, String adresse);
-
-    @Query("SELECT e FROM Etablissement e WHERE " +
-            "(6371 * acos(cos(radians(:latitude)) * cos(radians(e.latitude)) * " +
-            "cos(radians(e.longitude) - radians(:longitude)) + " +
-            "sin(radians(:latitude)) * sin(radians(e.latitude)))) <= :rayonKm")
-    List<Etablissement> findEtablissementsProches(
+    @Query("""
+    SELECT e FROM Etablissement e
+    JOIN e.services s
+    WHERE LOWER(s.nom) = LOWER(:serviceNom)
+    AND (
+        6371 * acos(
+            cos(radians(:latitude)) * cos(radians(e.latitude)) *
+            cos(radians(e.longitude) - radians(:longitude)) +
+            sin(radians(:latitude)) * sin(radians(e.latitude))
+        )
+    ) <= :rayonKm
+    ORDER BY (
+        6371 * acos(
+            cos(radians(:latitude)) * cos(radians(e.latitude)) *
+            cos(radians(e.longitude) - radians(:longitude)) +
+            sin(radians(:latitude)) * sin(radians(e.latitude))
+        )
+    )
+    """)
+    List<Etablissement> findEtablissementsProchesParServices(
+            @Param("serviceNom") String serviceNom,
             @Param("latitude") double latitude,
             @Param("longitude") double longitude,
             @Param("rayonKm") double rayonKm

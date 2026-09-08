@@ -1,7 +1,7 @@
 CREATE TABLE users (
                        id BIGINT AUTO_INCREMENT PRIMARY KEY,
                        nom VARCHAR(255) NOT NULL,
-                       prenom VARCHAR(255) NOT NULL,
+                       prenom VARCHAR(255),
                        email VARCHAR(255) NOT NULL UNIQUE,
                        password VARCHAR(255) NOT NULL,
                        role VARCHAR(50) NOT NULL
@@ -19,15 +19,15 @@ CREATE TABLE admin (
 );
 
 CREATE TABLE etablissements (
-                                id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                                nom VARCHAR(255) NOT NULL,
+                                id BIGINT PRIMARY KEY,
                                 adresse VARCHAR(255) NOT NULL,
                                 telephone VARCHAR(50),
                                 type VARCHAR(100),
                                 latitude DOUBLE NOT NULL,
                                 longitude DOUBLE NOT NULL,
                                 horaire_ouverture TIME,
-                                horaire_fermeture TIME
+                                horaire_fermeture TIME,
+                                CONSTRAINT fk_etablissement_user FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE services (

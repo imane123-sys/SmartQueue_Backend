@@ -1,6 +1,7 @@
 package org.example.smartqueue.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.smartqueue.dto.request.ClientRequestDTO;
 import org.example.smartqueue.dto.request.EtablissementRequestDTO;
 import org.example.smartqueue.dto.request.LoginRequestDTO;
 import org.example.smartqueue.dto.request.RegisterRequestDTO;
@@ -19,7 +20,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register/client")
-    public ResponseEntity<AuthResponseDTO> registerClient(@Valid @RequestBody RegisterRequestDTO requestDTO) {
+    public ResponseEntity<AuthResponseDTO> registerClient(@Valid @RequestBody ClientRequestDTO requestDTO) {
         AuthResponseDTO response = authService.registerClient(requestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

@@ -4,6 +4,8 @@ import lombok.*;
 import org.example.smartqueue.enums.StatutTicket;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tickets")
@@ -35,5 +37,10 @@ public class Ticket {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "service_id", nullable = false)
-    private Service service;
+    private Services services;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "ticket")
+    private List<Notification> notifications = new ArrayList<>();
+
 }

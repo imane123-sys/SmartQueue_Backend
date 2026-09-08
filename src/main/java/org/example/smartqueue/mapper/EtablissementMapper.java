@@ -7,6 +7,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface EtablissementMapper {
 
@@ -24,4 +26,6 @@ public interface EtablissementMapper {
     @Mapping(target = "role", ignore = true)
     @Mapping(target = "password", ignore = true)
     void updateEntityFromDto(EtablissementRequestDTO requestDTO, @MappingTarget Etablissement etablissement);
+    List<EtablissementResponseDTO> toDTOList(List<Etablissement>etablissement);
+    void updateEntityFromDTO(@MappingTarget Etablissement etablissement ,EtablissementRequestDTO etablissementRequestDTO);
 }
