@@ -7,6 +7,8 @@ import org.example.smartqueue.entity.Ticket;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface TicketMapper {
 
@@ -27,4 +29,5 @@ public interface TicketMapper {
     @Mapping(target = "client", ignore = true)
     @Mapping(target = "services", ignore = true)
     Ticket toEntity(TicketRequestDTO requestDTO);
+    List<TicketResponseDTO> toDTOList(List<Ticket>tickets);
 }

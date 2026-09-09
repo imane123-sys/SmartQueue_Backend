@@ -12,5 +12,6 @@ public interface ServiceRepository extends JpaRepository<Services, Long> {
     List<Services> findByEtablissementId(Long etablissementId);
 
     boolean existsByNomAndEtablissementId(String nom, Long etablissementId);
+    List<Services>findServicesByNom(String nom);
 //    List<Etablissement>findByS
 }

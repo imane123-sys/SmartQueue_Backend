@@ -55,6 +55,7 @@ CREATE TABLE tickets (
 
 CREATE TABLE notifications (
                                id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                               titre VARCHAR(255) NOT NULL,
                                message VARCHAR(255) NOT NULL,
                                date_envoi DATETIME NOT NULL,
                                statut VARCHAR(50) NOT NULL,

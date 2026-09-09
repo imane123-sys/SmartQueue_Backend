@@ -10,7 +10,7 @@ public interface TicketService {
     TicketResponseDTO reserveTicket(TicketRequestDTO ticket);
     TicketResponseDTO suivreTicket(long id);
     List<TicketResponseDTO>getHistorique(long id);
-    TicketResponseDTO getTicketsEnAttente(long ticketid,long clientId);
+    List<TicketResponseDTO> getTicketsEnAttente();
     List<TicketResponseDTO>annulerTicket(long ticketid,long clientId);
     TicketResponseDTO appelerTicketSuivant(long serviceId);
     TicketResponseDTO modifierStatut(long id, StatutTicket nouveauStatut);

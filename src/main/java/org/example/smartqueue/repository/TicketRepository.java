@@ -1,6 +1,7 @@
 package org.example.smartqueue.repository;
 
 
+import org.example.smartqueue.dto.response.TicketResponseDTO;
 import org.example.smartqueue.entity.Ticket;
 import org.example.smartqueue.enums.StatutTicket;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,4 +29,5 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     );
 
     boolean existsByClientIdAndServicesIdAndStatutIn(Long clientId, Long serviceId, List<StatutTicket> statutsActifs);
+    List<Ticket>findByStatut_EnAttenteAndServices_Nom(String nom);
 }
