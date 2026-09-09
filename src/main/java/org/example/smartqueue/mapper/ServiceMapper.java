@@ -24,6 +24,6 @@ public interface ServiceMapper {
     @Mapping(target = "etablissement", ignore = true)
     void updateEntityFromDto(ServiceRequestDTO requestDTO, @MappingTarget Services services);
     List<ServiceResponseDTO>toDTOList(List<Services>services);
-    void updateEntityFromDTO(ServiceRequestDTO service, @MappingTarget Services services)
+    void updateEntityFromDTO(ServiceRequestDTO service, @MappingTarget Services services);
 
 }

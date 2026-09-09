@@ -17,15 +17,15 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     List<Ticket> findByClientIdOrderByDateCreationDesc(Long clientId);
 
-    List<Ticket> findByServiceIdAndStatutOrderByPositionAsc(Long serviceId, StatutTicket statut);
+    List<Ticket> findByServicesIdAndStatutOrderByPositionAsc(Long serviceId, StatutTicket statut);
 
-    long countByServiceIdAndStatutAndPositionLessThan(Long serviceId, StatutTicket statut, Integer position);
+    long countByServicesIdAndStatutAndPositionLessThan(Long serviceId, StatutTicket statut, Integer position);
 
-    @Query("SELECT MAX(t.position) FROM Ticket t WHERE t.service.id = :serviceId AND t.dateCreation >= :debutJournee")
+    @Query("SELECT MAX(t.position) FROM Ticket t WHERE t.services.id = :serviceId AND t.dateCreation >= :debutJournee")
     Optional<Integer> findMaxPositionDuJour(
             @Param("serviceId") Long serviceId,
             @Param("debutJournee") LocalDateTime debutJournee
     );
 
-    boolean existsByClientIdAndServiceIdAndStatutIn(Long clientId, Long serviceId, List<StatutTicket> statutsActifs);
+    boolean existsByClientIdAndServicesIdAndStatutIn(Long clientId, Long serviceId, List<StatutTicket> statutsActifs);
 }

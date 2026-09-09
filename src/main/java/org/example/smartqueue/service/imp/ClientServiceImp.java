@@ -5,6 +5,7 @@ import org.example.smartqueue.dto.request.ClientRequestDTO;
 import org.example.smartqueue.dto.response.ClientResponseDTO;
 import org.example.smartqueue.dto.response.UserResponseDTO;
 import org.example.smartqueue.entity.Client;
+import org.example.smartqueue.enums.Role;
 import org.example.smartqueue.mapper.ClientMapper;
 import org.example.smartqueue.repository.ClientRepository;
 import org.example.smartqueue.service.ClientService;
@@ -19,10 +20,9 @@ public  class ClientServiceImp implements ClientService {
     @Override
      public ClientResponseDTO createClient(ClientRequestDTO client){
         Client client1= clientMapper.toEntity(client);
+        client1.setRole(Role.CLIENT);
         Client clientt= clientRepository.save(client1);
                 return clientMapper.toDto(clientt);
-
-
     }
     @Override
      public ClientResponseDTO getClientById(long id){

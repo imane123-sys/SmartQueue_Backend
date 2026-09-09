@@ -12,9 +12,9 @@ public interface TicketMapper {
 
     @Mapping(source = "client.id", target = "clientId")
     @Mapping(source = "client.nom", target = "nomClient")
-    @Mapping(source = "service.id", target = "serviceId")
-    @Mapping(source = "service.nom", target = "nomService")
-    @Mapping(source = "service.etablissement.nom", target = "nomEtablissement")
+    @Mapping(source = "services.id", target = "serviceId")
+    @Mapping(source = "services.nom", target = "nomService")
+    @Mapping(source = "services.etablissement.nom", target = "nomEtablissement")
     TicketResponseDTO toResponseDTO(Ticket ticket);
 
     @Mapping(target = "id", ignore = true)
@@ -25,6 +25,6 @@ public interface TicketMapper {
     @Mapping(target = "tempsEstime", ignore = true)
     @Mapping(target = "statut", ignore = true)
     @Mapping(target = "client", ignore = true)
-    @Mapping(target = "service", ignore = true)
+    @Mapping(target = "services", ignore = true)
     Ticket toEntity(TicketRequestDTO requestDTO);
 }

@@ -26,6 +26,6 @@ public class Services {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "etablissement_id", nullable = false)
     private Etablissement etablissement;
-    @OneToMany(mappedBy ="service")
+    @OneToMany(mappedBy ="services")
      private List<Ticket> tickets= new ArrayList<>();
 }
