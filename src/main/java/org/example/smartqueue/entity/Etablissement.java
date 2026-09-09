@@ -1,5 +1,7 @@
 package org.example.smartqueue.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,7 +26,10 @@ public class Etablissement extends User {
     private double latitude;
     private double longitude;
 
+
     private LocalTime horaireOuverture;
+
+
     private LocalTime horaireFermeture;
     @OneToMany(mappedBy ="etablissement" )
     private List<Services> services= new ArrayList<>();

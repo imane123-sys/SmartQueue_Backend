@@ -62,14 +62,16 @@ public class EtablissementController {
                 etablissementService.getAllEtablissements()
         );
     }
-
+// corriger probleme de modification
     @PutMapping("/update")
-    public ResponseEntity<Void> updateEtablissement(   @RequestParam long id,
-                                                       @Valid @RequestBody EtablissementRequestDTO etablissementRequestDTO)
-    {
+    public ResponseEntity<EtablissementResponseDTO> updateEtablissement(
+            @PathVariable long id,
+            @Valid @RequestBody EtablissementRequestDTO dto) {
 
-        etablissementService.updateEtablissement(id,etablissementRequestDTO);
-        return ResponseEntity.noContent().build();
+        EtablissementResponseDTO updated =
+                etablissementService.updateEtablissement(id, dto);
+
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/delete")

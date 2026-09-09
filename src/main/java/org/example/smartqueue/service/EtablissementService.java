@@ -9,7 +9,7 @@ public interface EtablissementService {
     List<EtablissementResponseDTO>findEtablissementsProchesParServices(String serviceNom,double latitude,double longitude,double rayonKm);
     EtablissementResponseDTO getEtablissementById(long id);
     List<EtablissementResponseDTO> getAllEtablissements();
-    void updateEtablissement(long id,EtablissementRequestDTO etablissement);
+    EtablissementResponseDTO updateEtablissement(long id,EtablissementRequestDTO etablissement);
     EtablissementResponseDTO createEtablissement(EtablissementRequestDTO etablissement);
     void deleteEtablissement(long id);
 

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.smartqueue.dto.request.EtablissementRequestDTO;
 import org.example.smartqueue.dto.response.EtablissementResponseDTO;
 import org.example.smartqueue.entity.Etablissement;
+import org.example.smartqueue.enums.Role;
 import org.example.smartqueue.mapper.ClientMapper;
 import org.example.smartqueue.mapper.EtablissementMapper;
 import org.example.smartqueue.repository.EtablissementRepository;
@@ -25,7 +26,7 @@ public  class EtablissementServiceImp implements EtablissementService {
     }
     @Override
     public EtablissementResponseDTO getEtablissementById(long id){
-         Etablissement etablissement =etablissementRepository.findById(id).orElseThrow();
+         Etablissement etablissement =etablissementRepository.findById(id).orElseThrow(()->new RuntimeException("cl'établissment avec ce id n'existe pas"));
          return etablissementMapper.toResponseDTO(etablissement);
 
     }
@@ -36,15 +37,19 @@ public  class EtablissementServiceImp implements EtablissementService {
 
     }
     @Override
-     public void updateEtablissement(long id, EtablissementRequestDTO etablissementRequestDTO){
+     public EtablissementResponseDTO updateEtablissement(long id, EtablissementRequestDTO etablissementRequestDTO){
          Etablissement etablissement=etablissementRepository.findById(id).orElseThrow(()->new RuntimeException("cet établissement n'existe pas"));
-         etablissementMapper.updateEntityFromDTO(etablissement ,etablissementRequestDTO);
+              etablissementMapper.updateEntityFromDto(etablissementRequestDTO,etablissement );
+                return etablissementMapper.toResponseDTO(etablissementRepository.save(etablissement));
+
+
 
    }
 
     @Override
     public EtablissementResponseDTO createEtablissement(EtablissementRequestDTO etablissement) {
         Etablissement etablissement1= etablissementMapper.toEntity(etablissement);
+        etablissement1.setRole(Role.ETABLISSEMENT);
         Etablissement etablissement2 =etablissementRepository.save(etablissement1);
                 return etablissementMapper.toResponseDTO(etablissement2);
 

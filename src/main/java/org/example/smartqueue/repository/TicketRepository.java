@@ -29,5 +29,5 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     );
 
     boolean existsByClientIdAndServicesIdAndStatutIn(Long clientId, Long serviceId, List<StatutTicket> statutsActifs);
-    List<Ticket>findByStatut_EnAttenteAndServices_Nom(String nom);
+    List<Ticket>findByStatutAndServices_Nom(StatutTicket statut ,String nom);
 }

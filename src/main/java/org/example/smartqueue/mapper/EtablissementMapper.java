@@ -15,11 +15,10 @@ public interface EtablissementMapper {
     @Mapping(target = "distanceKm", ignore = true)
     @Mapping(target = "tempsAttenteEstimeMinutes", ignore = true)
     @Mapping(target = "nombrePersonnesEnAttente", ignore = true)
+
     EtablissementResponseDTO toResponseDTO(Etablissement etablissement);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "role", ignore = true)
-    @Mapping(target = "password", ignore = true)
     Etablissement toEntity(EtablissementRequestDTO requestDTO);
 
     @Mapping(target = "id", ignore = true)
@@ -27,5 +26,4 @@ public interface EtablissementMapper {
     @Mapping(target = "password", ignore = true)
     void updateEntityFromDto(EtablissementRequestDTO requestDTO, @MappingTarget Etablissement etablissement);
     List<EtablissementResponseDTO> toDTOList(List<Etablissement>etablissement);
-    void updateEntityFromDTO(@MappingTarget Etablissement etablissement ,EtablissementRequestDTO etablissementRequestDTO);
 }
