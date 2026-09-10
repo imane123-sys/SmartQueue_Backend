@@ -20,7 +20,7 @@ public class Ticket {
     @Column(name = "date_creation")
     private LocalDateTime dateCreation;
 
-    @Column(name = "qr_code")
+    @Column(name = "qr_code" ,columnDefinition = "LONGTEXT")
     private String qrCode;
 
     private int position;

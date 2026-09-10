@@ -1,0 +1,2 @@
+ALTER TABLE tickets
+    MODIFY COLUMN qr_code LONGTEXT NOT NULL;

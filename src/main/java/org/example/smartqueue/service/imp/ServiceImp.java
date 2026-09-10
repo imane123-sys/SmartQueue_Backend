@@ -34,6 +34,7 @@ public  class ServiceImp implements ServiceSer {
     Services services =serviceMapper.toEntity(service);
     Etablissement etablissement = etablissementRepository.findById(service.getEtablissementId()).get();
     services.setEtablissement(etablissement);
+    services.setDureeMoyenne(service.getDureeMoyenne());
     return serviceMapper.toResponseDTO(serviceRepository.save(services)) ;
 }
 
@@ -51,6 +52,11 @@ public  class ServiceImp implements ServiceSer {
     public void delete(long id) {
         serviceRepository.deleteById(id);
 
+    }
+    @Override
+    public List<ServiceResponseDTO>getALlServices(){
+        List<Services> services= serviceRepository.findAll();
+        return serviceMapper.toDTOList(services);
     }
 }
 

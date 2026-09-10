@@ -13,6 +13,7 @@ public interface ServiceSer {
     ServiceResponseDTO createService(ServiceRequestDTO service);
     ServiceResponseDTO updateService(long id,ServiceRequestDTO service);
     void delete(long id);
+    List<ServiceResponseDTO>getALlServices();
 
 
 }

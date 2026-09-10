@@ -68,6 +68,11 @@ public class ServiceController {
 
         return ResponseEntity.noContent().build();
     }
+    @GetMapping
+    public ResponseEntity<List<ServiceResponseDTO>>getAllServices(){
+        return ResponseEntity.ok(serviceService.getALlServices());
+    }
+
 }
 
 

@@ -7,6 +7,7 @@ import com.google.zxing.common.BitMatrix;
 import lombok.RequiredArgsConstructor;
 import org.example.smartqueue.dto.request.TicketRequestDTO;
 import org.example.smartqueue.dto.response.TicketResponseDTO;
+import org.example.smartqueue.entity.Notification;
 import org.example.smartqueue.entity.Services;
 import org.example.smartqueue.entity.Ticket;
 import org.example.smartqueue.enums.StatutTicket;
@@ -45,15 +46,26 @@ public class TicketServiceImp implements TicketService {
         tickets.setDateCreation(LocalDateTime.now());
         tickets.setPosition(services.getTickets().size()+1);
         tickets.setStatut(StatutTicket.EN_ATTENTE);
-        ticketRepository.save(tickets);
+
         try {
-            tickets.setQrCode(generateQR("TICKET-" + tickets.getId()));
+            tickets.setQrCode(generateQR("TICKET-" + tickets.getNumero()));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        tickets.setTempsEstime(getTicketsEnAttente(tickets.getStatut(),services.getNom()).size() * services.getDureeMoyenne());
-        tickets.getNotifications().add(notificationService.saveNotification(tickets,"Ticket reservé","Votre ticket a été réservé avec succès."));
-                  return ticketMapper.toResponseDTO(ticketRepository.save(tickets));
+        int duree = services.getDureeMoyenne() > 0 ? services.getDureeMoyenne() : 10;
+
+
+
+        tickets.setTempsEstime(tickets.getPosition() * duree);
+
+        Ticket savedTicket = ticketRepository.save(tickets);
+        Notification notification = notificationService.saveNotification(
+                savedTicket,
+                "Ticket réservé",
+                "Votre ticket a été réservé avec succès."
+        );
+        savedTicket.getNotifications().add(notification);
+        return ticketMapper.toResponseDTO(ticketRepository.save(tickets));
 
     }
     @Override
