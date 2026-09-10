@@ -38,8 +38,13 @@ public class ClientController {
     public ResponseEntity <List<ClientResponseDTO>>getAllClients(){
         return ResponseEntity.ok(clientService.getAllClients());
     }
-    @PutMapping("/update")
-    public ResponseEntity <ClientResponseDTO>updateClient(@RequestParam long id ,@RequestBody ClientRequestDTO clientRequestDTO){
+    @PutMapping("/update/{id}")
+    public ResponseEntity <ClientResponseDTO>updateClient(@PathVariable long id ,@RequestBody ClientRequestDTO clientRequestDTO){
         return ResponseEntity.ok(clientService.updateClient(id,clientRequestDTO));
+    }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity <Void>deleteClient(@PathVariable long id){
+         clientService.deleteClient(id);
+         return ResponseEntity.noContent().build();
     }
 }

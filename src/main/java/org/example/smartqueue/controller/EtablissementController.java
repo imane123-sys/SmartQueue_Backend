@@ -63,7 +63,7 @@ public class EtablissementController {
         );
     }
 // corriger probleme de modification
-    @PutMapping("/update")
+    @PutMapping("/update/{id}")
     public ResponseEntity<EtablissementResponseDTO> updateEtablissement(
             @PathVariable long id,
             @Valid @RequestBody EtablissementRequestDTO dto) {

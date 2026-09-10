@@ -3,8 +3,10 @@ package org.example.smartqueue.service.imp;
 import lombok.RequiredArgsConstructor;
 import org.example.smartqueue.dto.request.ServiceRequestDTO;
 import org.example.smartqueue.dto.response.ServiceResponseDTO;
+import org.example.smartqueue.entity.Etablissement;
 import org.example.smartqueue.entity.Services;
 import org.example.smartqueue.mapper.ServiceMapper;
+import org.example.smartqueue.repository.EtablissementRepository;
 import org.example.smartqueue.repository.ServiceRepository;
 import org.example.smartqueue.service.ServiceSer;
 import org.springframework.stereotype.Service;
@@ -16,12 +18,12 @@ import java.util.List;
 public  class ServiceImp implements ServiceSer {
     private final ServiceRepository serviceRepository;
     private final ServiceMapper serviceMapper;
+    private final EtablissementRepository etablissementRepository;
 
     @Override
     public List<ServiceResponseDTO>getServicesByEtablissementById(long id) {
         List<Services> services = serviceRepository.findByEtablissementId(id);
         return serviceMapper.toDTOList(services);
-
     }
     @Override
     public  Boolean existsByNomAndEtablissementId(String nom,long id) {
@@ -30,9 +32,10 @@ public  class ServiceImp implements ServiceSer {
 @Override
  public ServiceResponseDTO createService(ServiceRequestDTO service) {
     Services services =serviceMapper.toEntity(service);
-       return serviceMapper.toResponseDTO(serviceRepository.save(services)) ;
+    Etablissement etablissement = etablissementRepository.findById(service.getEtablissementId()).get();
+    services.setEtablissement(etablissement);
+    return serviceMapper.toResponseDTO(serviceRepository.save(services)) ;
 }
-
 
 
     @Override

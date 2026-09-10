@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface NotificationService {
     void notificationConfirmation(Ticket ticket);
-    void sendTurnApproachingNotification(TicketRequestDTO ticket, int positionRestante);
-    void notificationUrTurn(TicketRequestDTO ticket);
+    void sendTurnApproachingNotification(long idTicket,long position ,long tempsEstime );
+    void notificationUrTurn(long idTicket,long idClient,Ticket ticket);
     void notificationAnnulationTicket(long id);
     List<NotificationResponseDTO>getNotificationsByClient(long idClient);
     void sendEmailAsync(String to, String subject, String body);

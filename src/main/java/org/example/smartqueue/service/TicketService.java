@@ -5,15 +5,18 @@ import org.example.smartqueue.dto.response.TicketResponseDTO;
 import org.example.smartqueue.enums.StatutTicket;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TicketService {
     TicketResponseDTO reserveTicket(TicketRequestDTO ticket);
     TicketResponseDTO suivreTicket(long id);
-    List<TicketResponseDTO>getHistorique(long id);
-    List<TicketResponseDTO> getTicketsEnAttente();
-    List<TicketResponseDTO>annulerTicket(long ticketid,long clientId);
+    Map<String ,Long> getHistorique(long id);
+    List<TicketResponseDTO> getTicketsEnAttente(StatutTicket statut ,String nomService);
+    TicketResponseDTO annulerTicket(long ticketid,long clientId);
     TicketResponseDTO appelerTicketSuivant(long serviceId);
-    TicketResponseDTO modifierStatut(long id, StatutTicket nouveauStatut);
+    TicketResponseDTO modifierStatut(long ticketid,StatutTicket nouveauStatut);
     TicketResponseDTO getTicketById(long id);
+    String generateQR(String text)  throws Exception ;
 
-}
+
+    }

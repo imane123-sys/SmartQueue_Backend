@@ -23,7 +23,7 @@ public interface EtablissementMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "role", ignore = true)
-    @Mapping(target = "password", ignore = true)
+//    @Mapping(target = "password", ignore = true)
     void updateEntityFromDto(EtablissementRequestDTO requestDTO, @MappingTarget Etablissement etablissement);
     List<EtablissementResponseDTO> toDTOList(List<Etablissement>etablissement);
 }

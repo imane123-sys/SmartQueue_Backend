@@ -30,4 +30,15 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     boolean existsByClientIdAndServicesIdAndStatutIn(Long clientId, Long serviceId, List<StatutTicket> statutsActifs);
     List<Ticket>findByStatutAndServices_Nom(StatutTicket statut ,String nom);
+    @Query("""
+    SELECT COUNT(t)
+    FROM Ticket t
+    WHERE t.services.etablissement.id = :etablissementId
+    AND t.statut = :statut
+""")
+    long countTicketsEtablissemnt(
+            @Param("etablissementId") long etablissementId,
+            @Param("statut") StatutTicket statut
+    );
+
 }

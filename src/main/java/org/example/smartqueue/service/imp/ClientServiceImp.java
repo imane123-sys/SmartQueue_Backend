@@ -58,6 +58,11 @@ public  class ClientServiceImp implements ClientService {
         return clientMapper.toDto(clientRepository.save(client));
 
     }
+    @Override
+    public void deleteClient(long id){
+        clientRepository.deleteById(id);
+    }
+
 
 
 
