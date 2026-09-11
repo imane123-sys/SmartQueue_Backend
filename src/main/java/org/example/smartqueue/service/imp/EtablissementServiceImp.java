@@ -9,6 +9,8 @@ import org.example.smartqueue.mapper.ClientMapper;
 import org.example.smartqueue.mapper.EtablissementMapper;
 import org.example.smartqueue.repository.EtablissementRepository;
 import org.example.smartqueue.service.EtablissementService;
+import org.example.smartqueue.service.GeocodingService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +20,8 @@ public  class EtablissementServiceImp implements EtablissementService {
     private final EtablissementMapper etablissementMapper;
     private final EtablissementRepository etablissementRepository;
     private final ClientMapper clientMapper;
+    private final GeocodingService geocodingService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
      public List<EtablissementResponseDTO> findEtablissementsProchesParServices(String serviceNom,double latitude,double longitude,double rayonKm){
@@ -49,7 +53,12 @@ public  class EtablissementServiceImp implements EtablissementService {
     @Override
     public EtablissementResponseDTO createEtablissement(EtablissementRequestDTO etablissement) {
         Etablissement etablissement1= etablissementMapper.toEntity(etablissement);
+        double [] coordinates=geocodingService.getCoordinates(etablissement1.getAdresse());
+        etablissement1.setLatitude(coordinates[0]);
+        etablissement1.setLongitude(coordinates[1]);
         etablissement1.setRole(Role.ETABLISSEMENT);
+        etablissement1.setPassword(passwordEncoder.encode(etablissement.getPassword()));
+
         Etablissement etablissement2 =etablissementRepository.save(etablissement1);
                 return etablissementMapper.toResponseDTO(etablissement2);
 

@@ -9,6 +9,7 @@ import org.example.smartqueue.enums.Role;
 import org.example.smartqueue.mapper.ClientMapper;
 import org.example.smartqueue.repository.ClientRepository;
 import org.example.smartqueue.service.ClientService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,10 +18,12 @@ import java.util.List;
 public  class ClientServiceImp implements ClientService {
     private final ClientRepository clientRepository;
     private final ClientMapper clientMapper;
+    private final PasswordEncoder passwordEncoder;
     @Override
      public ClientResponseDTO createClient(ClientRequestDTO client){
         Client client1= clientMapper.toEntity(client);
         client1.setRole(Role.CLIENT);
+        client1.setPassword(passwordEncoder.encode(client.getPassword()));
         Client clientt= clientRepository.save(client1);
                 return clientMapper.toDto(clientt);
     }

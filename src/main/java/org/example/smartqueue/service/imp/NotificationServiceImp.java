@@ -2,11 +2,9 @@ package org.example.smartqueue.service.imp;
 
 import lombok.RequiredArgsConstructor;
 import org.example.smartqueue.dto.response.NotificationResponseDTO;
-import org.example.smartqueue.entity.Client;
-import org.example.smartqueue.entity.Notification;
-import org.example.smartqueue.entity.Ticket;
-import org.example.smartqueue.entity.User;
+import org.example.smartqueue.entity.*;
 import org.example.smartqueue.enums.StatutNotification;
+import org.example.smartqueue.enums.StatutTicket;
 import org.example.smartqueue.mapper.NotificationMapper;
 import org.example.smartqueue.repository.ClientRepository;
 import org.example.smartqueue.repository.NotificationRepository;
@@ -74,6 +72,14 @@ public  class NotificationServiceImp implements NotificationService {
 
     @Override
     public void notificationAnnulationTicket(long id){
+        Ticket ticket= ticketRepository.findById(id).orElseThrow(()->new RuntimeException("ce ticket n'existe pas "));
+
+        ticket.setStatut(StatutTicket.ABSENT);
+        Notification notification = new Notification();
+        notification.setTitre("Le client a annulé le ticket");
+        notification.setMessage("Ce ticket numéro "+ticket.getId()+ "est  annulé par "+ticket.getClient().getId());
+        notification.setTicket(ticket);
+        notificationRepository.save(notification);
 
     }
     @Override

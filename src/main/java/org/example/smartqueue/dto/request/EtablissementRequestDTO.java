@@ -30,11 +30,6 @@ public class EtablissementRequestDTO {
     private String telephone;
     private String type;
 
-    @NotNull
-    private Double latitude;
-
-    @NotNull
-    private Double longitude;
     @JsonFormat(pattern = "HH:mm", shape = JsonFormat.Shape.STRING)
     @Schema(type = "string", example = "08:30")
 

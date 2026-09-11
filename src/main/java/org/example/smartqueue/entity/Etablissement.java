@@ -26,7 +26,6 @@ public class Etablissement extends User {
     private double latitude;
     private double longitude;
 
-
     private LocalTime horaireOuverture;
 
 
