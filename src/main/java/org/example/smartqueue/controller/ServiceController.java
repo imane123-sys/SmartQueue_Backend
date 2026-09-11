@@ -10,6 +10,7 @@ import org.example.smartqueue.dto.response.ServiceResponseDTO;
 import org.example.smartqueue.service.ServiceSer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class ServiceController {
     }
 
     @GetMapping("/exists")
+    @PreAuthorize("hasAnyAuthority('ETABLISSEMENT', 'ADMIN')")
     public ResponseEntity<Boolean> existsByNomAndEtablissementId(
             @RequestParam String nom,
             @RequestParam long id) {
@@ -41,6 +43,7 @@ public class ServiceController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasAnyAuthority('ETABLISSEMENT', 'ADMIN')")
     public ResponseEntity<ServiceResponseDTO> createService(
             @Valid @RequestBody ServiceRequestDTO serviceRequestDTO) {
 
@@ -51,6 +54,7 @@ public class ServiceController {
     }
 
     @PutMapping("/update")
+    @PreAuthorize("hasAnyAuthority('ETABLISSEMENT', 'ADMIN')")
     public ResponseEntity<ServiceResponseDTO> updateService(
             @RequestParam long id,
             @Valid @RequestBody ServiceRequestDTO serviceRequestDTO) {
@@ -61,6 +65,7 @@ public class ServiceController {
     }
 
     @DeleteMapping("/delete")
+    @PreAuthorize("hasAnyAuthority('ETABLISSEMENT', 'ADMIN')")
     public ResponseEntity<Void> deleteService(
             @RequestParam long id) {
 

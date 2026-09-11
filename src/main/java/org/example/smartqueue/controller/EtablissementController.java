@@ -8,6 +8,7 @@ import org.example.smartqueue.dto.response.EtablissementResponseDTO;
 import org.example.smartqueue.service.EtablissementService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class EtablissementController {
     private final EtablissementService etablissementService;
 
     @PostMapping("/create")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<EtablissementResponseDTO> createEtablissement(
             @Valid @RequestBody EtablissementRequestDTO etablissementRequestDTO) {
 
@@ -39,6 +41,7 @@ public class EtablissementController {
     }
 
     @GetMapping("/proches")
+    @PreAuthorize("hasAnyAuthority('CLIENT', 'ADMIN')")
     public ResponseEntity<List<EtablissementResponseDTO>> findEtablissementsProchesParServices(
             @RequestParam String serviceNom,
             @RequestParam double latitude,
@@ -64,6 +67,7 @@ public class EtablissementController {
     }
 // corriger probleme de modification
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasAnyAuthority('ETABLISSEMENT', 'ADMIN')")
     public ResponseEntity<EtablissementResponseDTO> updateEtablissement(
             @PathVariable long id,
             @Valid @RequestBody EtablissementRequestDTO dto) {
@@ -75,6 +79,7 @@ public class EtablissementController {
     }
 
     @DeleteMapping("/delete")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> deleteEtablissement(
             @RequestParam long id) {
 

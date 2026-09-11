@@ -26,7 +26,7 @@ public class AuthController {
     }
 
     @PostMapping("/register/etablissement")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> createEtablissement(@Valid @RequestBody EtablissementRequestDTO requestDTO) {
         authService.createEtablissementUser(requestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body("Compte établissement créé avec succès.");

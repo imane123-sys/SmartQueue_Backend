@@ -8,6 +8,7 @@ import org.example.smartqueue.service.ClientService;
 import org.example.smartqueue.service.imp.ClientServiceImp;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 public class ClientController {
     private final ClientService clientService;
     @PostMapping("/create")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ClientResponseDTO> createClient( @Valid @RequestBody ClientRequestDTO clientRequestDTO){
         ClientResponseDTO response =clientService.createClient(clientRequestDTO);
 
@@ -25,24 +27,29 @@ public class ClientController {
 
     }
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'CLIENT')")
     public ResponseEntity<ClientResponseDTO> getClientById(@PathVariable long id){
         return ResponseEntity.ok(clientService.getClientById(id));
 
     }
     @GetMapping("/client")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ClientResponseDTO> getClientById(@RequestParam String email){
         return ResponseEntity.ok(clientService.getClientByEmail(email));
 
     }
     @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity <List<ClientResponseDTO>>getAllClients(){
         return ResponseEntity.ok(clientService.getAllClients());
     }
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'CLIENT')")
     public ResponseEntity <ClientResponseDTO>updateClient(@PathVariable long id ,@RequestBody ClientRequestDTO clientRequestDTO){
         return ResponseEntity.ok(clientService.updateClient(id,clientRequestDTO));
     }
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity <Void>deleteClient(@PathVariable long id){
          clientService.deleteClient(id);
          return ResponseEntity.noContent().build();

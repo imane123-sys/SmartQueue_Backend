@@ -8,6 +8,7 @@ import org.example.smartqueue.dto.response.TicketResponseDTO;
 import org.example.smartqueue.enums.StatutTicket;
 import org.example.smartqueue.service.TicketService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class TicketController {
     private final TicketService ticketService;
 
     @PostMapping("/reserve")
+    @PreAuthorize("hasAuthority('CLIENT')")
     public ResponseEntity<TicketResponseDTO> reserveTicket(
             @Valid @RequestBody TicketRequestDTO ticketRequestDTO) {
 
@@ -28,6 +30,7 @@ public class TicketController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('CLIENT', 'ETABLISSEMENT', 'ADMIN')")
     public ResponseEntity<TicketResponseDTO> getTicketById(
             @PathVariable long id) {
 
@@ -35,6 +38,7 @@ public class TicketController {
     }
 
     @GetMapping("/attente")
+    @PreAuthorize("hasAnyAuthority('ETABLISSEMENT', 'ADMIN')")
     public ResponseEntity<List<TicketResponseDTO>> getTicketsEnAttente(
             @RequestParam StatutTicket statut,
             @RequestParam String nomService) {
@@ -45,6 +49,7 @@ public class TicketController {
     }
 
     @PutMapping("/annuler/{ticketid}")
+    @PreAuthorize("hasAuthority('CLIENT')")
     public ResponseEntity<TicketResponseDTO> annulerTicket(
             @PathVariable long ticketid,
             @RequestParam long clientId) {
@@ -55,6 +60,7 @@ public class TicketController {
     }
 
     @PutMapping("/appeler-suivant/{serviceId}")
+    @PreAuthorize("hasAuthority('ETABLISSEMENT')")
     public ResponseEntity<TicketResponseDTO> appelerTicketSuivant(
             @PathVariable long serviceId) {
 
@@ -64,6 +70,7 @@ public class TicketController {
     }
 
     @PutMapping("/statut/{ticketid}")
+    @PreAuthorize("hasAnyAuthority('ETABLISSEMENT', 'ADMIN')")
     public ResponseEntity<TicketResponseDTO> modifierStatut(
             @PathVariable long ticketid,
             @RequestParam StatutTicket nouveauStatut) {
@@ -74,6 +81,7 @@ public class TicketController {
     }
 
     @GetMapping("/historique/{id}")
+    @PreAuthorize("hasAuthority('CLIENT')")
     public ResponseEntity<Map<String, Long>> getHistorique(
             @PathVariable long id) {
 
@@ -83,6 +91,7 @@ public class TicketController {
     }
 
     @GetMapping("/suivre/{id}")
+    @PreAuthorize("hasAuthority('CLIENT')")
     public ResponseEntity<TicketResponseDTO> suivreTicket(
             @PathVariable long id) {
 
