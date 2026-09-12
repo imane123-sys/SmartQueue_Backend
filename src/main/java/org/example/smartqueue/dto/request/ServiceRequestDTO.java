@@ -9,14 +9,14 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ServiceRequestDTO {
-    @NotBlank
+    @NotBlank(message = "Le nom du service est obligatoire")
     private String nom;
 
     private String description;
 
-    @Min(1)
+    @Min(value = 1, message = "La durée moyenne doit être d'au moins 1 minute")
     private int dureeMoyenne;
 
-    @NotNull
+    @NotNull(message = "L'établissement est obligatoire")
     private Long etablissementId;
 }

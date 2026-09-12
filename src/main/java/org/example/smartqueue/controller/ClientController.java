@@ -6,6 +6,10 @@ import org.example.smartqueue.dto.request.ClientRequestDTO;
 import org.example.smartqueue.dto.response.ClientResponseDTO;
 import org.example.smartqueue.service.ClientService;
 import org.example.smartqueue.service.imp.ClientServiceImp;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -40,8 +44,8 @@ public class ClientController {
     }
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity <List<ClientResponseDTO>>getAllClients(){
-        return ResponseEntity.ok(clientService.getAllClients());
+    public  ResponseEntity<Page<ClientResponseDTO>>getAllClientsPaginated(@PageableDefault(page =0 , size =10, sort="nom", direction= Sort.Direction.ASC) Pageable pageable){
+        return ResponseEntity.ok(clientService.getAllClientsPaginated(pageable));
     }
     @PutMapping("/update/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'CLIENT')")
@@ -54,4 +58,12 @@ public class ClientController {
          clientService.deleteClient(id);
          return ResponseEntity.noContent().build();
     }
+    @GetMapping("/clients")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Page<ClientResponseDTO>>getAllClient(Pageable pageable){
+        return ResponseEntity.ok(clientService.getAllClientsPaginated(pageable));
+    }
+
+
+
 }

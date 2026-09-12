@@ -17,6 +17,8 @@ import org.example.smartqueue.repository.ServiceRepository;
 import org.example.smartqueue.repository.TicketRepository;
 import org.example.smartqueue.service.NotificationService;
 import org.example.smartqueue.service.TicketService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
@@ -124,6 +126,7 @@ public class TicketServiceImp implements TicketService {
         return status;
 
     }
+    @Override
      public TicketResponseDTO suivreTicket(long id){
          Ticket ticket= ticketRepository.findById(id).orElseThrow(()->new RuntimeException("ce ticket n'existe pas"));
          long personBefore = ticketRepository.countByServicesIdAndStatutAndPositionLessThan(ticket.getServices().getId(),ticket.getStatut(),ticket.getPosition());
@@ -133,6 +136,12 @@ public class TicketServiceImp implements TicketService {
 
 
      }
+     @Override
+    public Page<TicketResponseDTO> getTicketsByEtablissmentid(StatutTicket statut,Long id , Pageable pageable){
+        Page<Ticket> tickets=ticketRepository.findByStatutAndServices_Etablissement_Id(StatutTicket.EN_ATTENTE,id,pageable);
+        return tickets.map(ticketMapper::toResponseDTO);
+    }
+
 
 
 

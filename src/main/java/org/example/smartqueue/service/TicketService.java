@@ -3,6 +3,8 @@ package org.example.smartqueue.service;
 import org.example.smartqueue.dto.request.TicketRequestDTO;
 import org.example.smartqueue.dto.response.TicketResponseDTO;
 import org.example.smartqueue.enums.StatutTicket;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Map;
@@ -17,6 +19,7 @@ public interface TicketService {
     TicketResponseDTO modifierStatut(long ticketid,StatutTicket nouveauStatut);
     TicketResponseDTO getTicketById(long id);
     String generateQR(String text)  throws Exception ;
+     Page <TicketResponseDTO> getTicketsByEtablissmentid(StatutTicket statut ,Long id , Pageable pageable);
 
 
     }

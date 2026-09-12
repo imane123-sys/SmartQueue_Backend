@@ -3,13 +3,17 @@ package org.example.smartqueue.service.imp;
 import lombok.RequiredArgsConstructor;
 import org.example.smartqueue.dto.request.EtablissementRequestDTO;
 import org.example.smartqueue.dto.response.EtablissementResponseDTO;
+import org.example.smartqueue.dto.response.NotificationResponseDTO;
 import org.example.smartqueue.entity.Etablissement;
+import org.example.smartqueue.entity.Notification;
 import org.example.smartqueue.enums.Role;
 import org.example.smartqueue.mapper.ClientMapper;
 import org.example.smartqueue.mapper.EtablissementMapper;
 import org.example.smartqueue.repository.EtablissementRepository;
 import org.example.smartqueue.service.EtablissementService;
 import org.example.smartqueue.service.GeocodingService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,9 +39,9 @@ public  class EtablissementServiceImp implements EtablissementService {
 
     }
     @Override
-    public List<EtablissementResponseDTO> getAllEtablissements(){
-        List<Etablissement> etablissements =etablissementRepository.findAll();
-        return etablissementMapper.toDTOList(etablissements);
+    public Page<EtablissementResponseDTO> getAllEtablissements(Pageable pageable){
+        Page<Etablissement> etablissements =etablissementRepository.findAll(pageable);
+        return etablissements.map(etablissementMapper::toResponseDTO);
 
     }
     @Override
@@ -68,6 +72,7 @@ public  class EtablissementServiceImp implements EtablissementService {
          etablissementRepository.deleteById(id);
 
     }
+
 
 
 

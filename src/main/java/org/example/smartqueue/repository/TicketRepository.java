@@ -4,6 +4,8 @@ package org.example.smartqueue.repository;
 import org.example.smartqueue.dto.response.TicketResponseDTO;
 import org.example.smartqueue.entity.Ticket;
 import org.example.smartqueue.enums.StatutTicket;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -40,5 +42,8 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
             @Param("etablissementId") long etablissementId,
             @Param("statut") StatutTicket statut
     );
+//    ByServices_Etablissement_Id
+
+    Page<Ticket>  findByStatutAndServices_Etablissement_Id(StatutTicket statut , Long EtablissementId, Pageable pageable);
 
 }

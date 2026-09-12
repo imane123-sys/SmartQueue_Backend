@@ -6,6 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.example.smartqueue.dto.request.EtablissementRequestDTO;
 import org.example.smartqueue.dto.response.EtablissementResponseDTO;
 import org.example.smartqueue.service.EtablissementService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -57,13 +61,12 @@ public class EtablissementController {
                 )
         );
     }
-
     @GetMapping
-    public ResponseEntity<List<EtablissementResponseDTO>> getAllEtablissements() {
+    public ResponseEntity<Page<EtablissementResponseDTO>> getAllEtablissements(@PageableDefault(page=0 , size=10 , sort="nom",direction= Sort.Direction.ASC)Pageable pageable) {
 
         return ResponseEntity.ok(
-                etablissementService.getAllEtablissements()
-        );
+                etablissementService.getAllEtablissements(pageable));
+
     }
 // corriger probleme de modification
     @PutMapping("/update/{id}")

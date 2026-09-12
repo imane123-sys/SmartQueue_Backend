@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public class NotificationResponseDTO {
     private Long id;
     private String message;
+    private String titre;
     private LocalDateTime dateEnvoi;
     private StatutNotification statut;
 

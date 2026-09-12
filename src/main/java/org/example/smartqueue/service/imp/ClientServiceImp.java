@@ -9,6 +9,8 @@ import org.example.smartqueue.enums.Role;
 import org.example.smartqueue.mapper.ClientMapper;
 import org.example.smartqueue.repository.ClientRepository;
 import org.example.smartqueue.service.ClientService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -38,11 +40,7 @@ public  class ClientServiceImp implements ClientService {
         Client client = clientRepository.findByEmail(email).get();
         return clientMapper.toDto(client);
     }
-    @Override
-     public List<ClientResponseDTO> getAllClients(){
-        List<Client> clients=clientRepository.findAll();
-        return clientMapper.toDTOList(clients);
-    }
+
     @Override
 //     public ClientResponseDTO updateClient(long id,ClientRequestDTO clientRequestDTO){
 //        ClientRequestDTO client= new ClientRequestDTO();
@@ -65,9 +63,11 @@ public  class ClientServiceImp implements ClientService {
     public void deleteClient(long id){
         clientRepository.deleteById(id);
     }
-
-
-
+    @Override
+     public Page<ClientResponseDTO> getAllClientsPaginated(Pageable pageable){
+      Page <Client> clients = clientRepository.findAll(pageable);
+      return clients.map(clientMapper::toDto);
+    }
 
 
 

@@ -2,7 +2,12 @@ package org.example.smartqueue.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.smartqueue.dto.response.NotificationResponseDTO;
+import org.example.smartqueue.entity.Notification;
 import org.example.smartqueue.service.NotificationService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -16,15 +21,7 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
-    @GetMapping("/client/{idClient}")
-    @PreAuthorize("hasAnyAuthority('CLIENT', 'ADMIN')")
-    public ResponseEntity<List<NotificationResponseDTO>> getNotificationsByClient(
-            @PathVariable long idClient) {
 
-        return ResponseEntity.ok(
-                notificationService.getNotificationsByClient(idClient)
-        );
-    }
 
     @PutMapping("/annuler-ticket/{id}")
     @PreAuthorize("hasAuthority('CLIENT')")
@@ -58,4 +55,27 @@ public class NotificationController {
 
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/Notifications/tickets/Etablissemnt/{idEtablissement}")
+    public ResponseEntity<Page<NotificationResponseDTO>> getNotificationsTicketsEtablissement(@PathVariable long idEtablissement, @PageableDefault(page = 0, size = 10, sort = "dateEnvoi", direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok(notificationService.getNotificationsTicketsEtablissement(idEtablissement, pageable));
+
+
+    }
+    @GetMapping("/Notifications/tickets/Client/{idClient}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','CLIENT')")
+    public ResponseEntity<Page<NotificationResponseDTO>>getNotificationsTicketsClient(@PathVariable long idClient, @PageableDefault(
+            page = 0,
+            size = 10,
+            sort = "dateEnvoi",
+            direction = Sort.Direction.DESC
+    )    Pageable pageable)
+    {
+        return ResponseEntity.ok(
+                notificationService.getNotificationsByClient(idClient,pageable));
+
+
+    }
+
+
 }

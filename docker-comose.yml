@@ -1,0 +1,13 @@
+services:
+  smartqueue:
+    build: .
+    ports:
+      - "8080:8080"
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: smartqueue
+    ports:
+      - "3307:3306"

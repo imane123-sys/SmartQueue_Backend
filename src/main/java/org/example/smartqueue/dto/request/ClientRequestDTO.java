@@ -22,7 +22,7 @@ public class ClientRequestDTO {
     private String email;
 
     private String telephone;
-    @NotBlank
+    @NotBlank(message = "Le mot de passe est obligatoire")
     private String password;
     private Role role;
 }

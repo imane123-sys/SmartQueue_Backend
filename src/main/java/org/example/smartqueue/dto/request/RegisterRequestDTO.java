@@ -8,17 +8,17 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RegisterRequestDTO {
-    @NotBlank
+    @NotBlank(message = "Le nom est obligatoire")
     private String nom;
 
-    @NotBlank
+    @NotBlank(message = "Le prénom est obligatoire")
     private String prenom;
 
-    @NotBlank
-    @Email
+    @NotBlank(message = "L'email est obligatoire")
+    @Email(message = "Format d'email invalide")
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "Le mot de passe est obligatoire")
     private String password;
 
     private String telephone;

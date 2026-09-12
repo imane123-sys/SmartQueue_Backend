@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,16 +14,17 @@ import java.time.LocalTime;
 @Getter
 @Setter
 public class EtablissementRequestDTO {
-    @NotBlank
-    @Email
+    @NotBlank(message = "L'email est obligatoire")
+    @Email(message = "Format d'email invalide")
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "Le mot de passe est obligatoire")
     private String password;
-    @NotBlank
+
+    @NotBlank(message = "Le nom est obligatoire")
     private String nom;
 
-    @NotBlank
+    @NotBlank(message = "L'adresse est obligatoire")
     private String adresse;
 
     private String telephone;
