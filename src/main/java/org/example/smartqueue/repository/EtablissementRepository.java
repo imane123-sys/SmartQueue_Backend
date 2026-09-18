@@ -15,8 +15,8 @@ import java.util.List;
 public interface EtablissementRepository extends JpaRepository<Etablissement, Long> {
 
     @Query("""
-    SELECT e FROM Etablissement e
-    JOIN e.services s
+    SELECT DISTINCT e FROM Etablissement e
+    JOIN  FETCH e.services s
     WHERE LOWER(s.nom) = LOWER(:serviceNom)
     AND (
         6371 * acos(
@@ -24,7 +24,7 @@ public interface EtablissementRepository extends JpaRepository<Etablissement, Lo
             cos(radians(e.longitude) - radians(:longitude)) +
             sin(radians(:latitude)) * sin(radians(e.latitude))
         )
-    ) <= :rayonKm
+    ) <= e.rayonKm
     ORDER BY (
         6371 * acos(
             cos(radians(:latitude)) * cos(radians(e.latitude)) *
@@ -36,8 +36,7 @@ public interface EtablissementRepository extends JpaRepository<Etablissement, Lo
     List<Etablissement> findEtablissementsProchesParServices(
             @Param("serviceNom") String serviceNom,
             @Param("latitude") double latitude,
-            @Param("longitude") double longitude,
-            @Param("rayonKm") double rayonKm
+            @Param("longitude") double longitude
     );
     Page<Etablissement>findAll(Pageable pageable);
 }

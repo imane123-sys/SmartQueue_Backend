@@ -9,7 +9,7 @@ import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {ServiceMapper.class})
 public interface EtablissementMapper {
 
     @Mapping(target = "distanceKm", ignore = true)

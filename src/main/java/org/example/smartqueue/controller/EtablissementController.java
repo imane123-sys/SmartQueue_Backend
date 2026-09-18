@@ -49,15 +49,13 @@ public class EtablissementController {
     public ResponseEntity<List<EtablissementResponseDTO>> findEtablissementsProchesParServices(
             @RequestParam String serviceNom,
             @RequestParam double latitude,
-            @RequestParam double longitude,
-            @RequestParam double rayonKm) {
+            @RequestParam double longitude) {
 
         return ResponseEntity.ok(
                 etablissementService.findEtablissementsProchesParServices(
                         serviceNom,
                         latitude,
-                        longitude,
-                        rayonKm
+                        longitude
                 )
         );
     }

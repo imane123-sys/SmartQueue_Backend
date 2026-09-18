@@ -1,0 +1,1 @@
+ALTER TABLE etablissements ADD COLUMN rayon_km DOUBLE NOT NULL DEFAULT 10.0;

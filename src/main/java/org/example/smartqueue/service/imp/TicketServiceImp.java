@@ -43,7 +43,7 @@ public class TicketServiceImp implements TicketService {
         Ticket tickets = new Ticket();
         Services services = serviceRepository.findById(ticket.getServiceId()).get();
         tickets.setServices(services);
-        tickets.setClient(clientRepository.findById(ticket.getClientId()).get());
+        tickets.setClient(clientRepository.findByEmail(ticket.getClientEmail()).get());
         tickets.setNumero(nombre);
         tickets.setDateCreation(LocalDateTime.now());
         tickets.setPosition(services.getTickets().size()+1);

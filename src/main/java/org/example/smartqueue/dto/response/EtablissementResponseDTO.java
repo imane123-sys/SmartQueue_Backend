@@ -6,6 +6,9 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 public class EtablissementResponseDTO implements Serializable {
@@ -21,7 +24,11 @@ public class EtablissementResponseDTO implements Serializable {
     @JsonFormat(pattern = "HH:mm", shape = JsonFormat.Shape.STRING)
     private LocalTime horaireFermeture;
 
-    private double distanceKm;
+    private double rayonKm;
+    private Double distanceKm;
     private int tempsAttenteEstimeMinutes;
     private long nombrePersonnesEnAttente;
+
+    List<ServiceResponseDTO> services= new ArrayList<>();
+
 }

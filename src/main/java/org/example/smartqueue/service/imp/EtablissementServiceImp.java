@@ -28,9 +28,36 @@ public  class EtablissementServiceImp implements EtablissementService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-     public List<EtablissementResponseDTO> findEtablissementsProchesParServices(String serviceNom,double latitude,double longitude,double rayonKm){
-         List <Etablissement> etablissements = etablissementRepository.findEtablissementsProchesParServices(serviceNom, latitude, longitude, rayonKm);
-         return etablissementMapper.toDTOList(etablissements);
+    public List<EtablissementResponseDTO> findEtablissementsProchesParServices(String serviceNom, double latitude, double longitude) {
+        if (latitude == 0.0 && longitude == 0.0) {
+            return List.of();
+        }
+
+        List<Etablissement> etablissements = etablissementRepository.findEtablissementsProchesParServices(serviceNom, latitude, longitude);
+        List<EtablissementResponseDTO> dtos = etablissementMapper.toDTOList(etablissements);
+
+        for (int i = 0; i < etablissements.size(); i++) {
+            Etablissement e = etablissements.get(i);
+            EtablissementResponseDTO dto = dtos.get(i);
+
+            double distance = calculerDistanceKm(latitude, longitude, e.getLatitude(), e.getLongitude());
+            dto.setDistanceKm(distance);
+        }
+
+        return dtos;
+    }
+
+    private double calculerDistanceKm(double lat1, double lon1, double lat2, double lon2) {
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double dist = 6371 * c;
+        return Math.round(dist * 10.0) / 10.0;
     }
     @Override
     public EtablissementResponseDTO getEtablissementById(long id){

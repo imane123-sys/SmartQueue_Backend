@@ -7,8 +7,11 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.smartqueue.dto.response.ServiceResponseDTO;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -30,6 +33,8 @@ public class EtablissementRequestDTO {
     private String telephone;
     private String type;
 
+    private Double rayonKm;
+
     @JsonFormat(pattern = "HH:mm", shape = JsonFormat.Shape.STRING)
     @Schema(type = "string", example = "08:30")
 
@@ -38,4 +43,5 @@ public class EtablissementRequestDTO {
     @Schema(type = "string", example = "18:30")
 
     private LocalTime horaireFermeture;
+
 }
