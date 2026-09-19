@@ -110,5 +110,9 @@ public class TicketController {
 
      }
 
-
+     @GetMapping("/client/{clientId}")
+     @PreAuthorize("hasAnyAuthority('CLIENT', 'ADMIN')")
+     public ResponseEntity<List<TicketResponseDTO>> getTicketsByClientId(@PathVariable Long clientId) {
+         return ResponseEntity.ok(ticketService.getTicketsByClientId(clientId));
+     }
 }

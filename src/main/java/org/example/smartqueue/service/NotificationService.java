@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface NotificationService {
     void notificationConfirmation(Ticket ticket);
+    void notificationConfirmation(long idTicket);
     void sendTurnApproachingNotification(long idTicket,long position ,long tempsEstime );
     void notificationUrTurn(long idTicket,long idClient,Ticket ticket);
     void notificationAnnulationTicket(long id);

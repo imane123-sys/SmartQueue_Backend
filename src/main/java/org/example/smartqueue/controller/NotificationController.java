@@ -23,6 +23,15 @@ public class NotificationController {
 
 
 
+    @PostMapping({"/confirmation/{idTicket}"})
+    @PreAuthorize("hasAnyAuthority('CLIENT', 'ETABLISSEMENT', 'ADMIN')")
+    public ResponseEntity<Void> notificationConfirmation(
+            @PathVariable long idTicket) {
+
+        notificationService.notificationConfirmation(idTicket);
+        return ResponseEntity.ok().build();
+    }
+
     @PutMapping("/annuler-ticket/{id}")
     @PreAuthorize("hasAuthority('CLIENT')")
     public ResponseEntity<Void> notificationAnnulationTicket(

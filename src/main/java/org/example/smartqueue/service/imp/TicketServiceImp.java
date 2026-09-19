@@ -17,6 +17,7 @@ import org.example.smartqueue.repository.ServiceRepository;
 import org.example.smartqueue.repository.TicketRepository;
 import org.example.smartqueue.service.NotificationService;
 import org.example.smartqueue.service.TicketService;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,7 @@ public class TicketServiceImp implements TicketService {
     private final TicketMapper ticketMapper;
     private final NotificationService notificationService;
     @Override
+    @Transactional
      public TicketResponseDTO reserveTicket(TicketRequestDTO ticket){
         int nombre = ThreadLocalRandom.current().nextInt(1000, 10000);
         Ticket tickets = new Ticket();
@@ -61,13 +63,8 @@ public class TicketServiceImp implements TicketService {
         tickets.setTempsEstime(tickets.getPosition() * duree);
 
         Ticket savedTicket = ticketRepository.save(tickets);
-        Notification notification = notificationService.saveNotification(
-                savedTicket,
-                "Ticket réservé",
-                "Votre ticket a été réservé avec succès."
-        );
-        savedTicket.getNotifications().add(notification);
-        return ticketMapper.toResponseDTO(ticketRepository.save(tickets));
+        notificationService.notificationConfirmation(savedTicket);
+        return ticketMapper.toResponseDTO(savedTicket);
 
     }
     @Override
@@ -142,9 +139,8 @@ public class TicketServiceImp implements TicketService {
         return tickets.map(ticketMapper::toResponseDTO);
     }
 
-
-
-
-
-
+    @Override
+    public List<TicketResponseDTO> getTicketsByClientId(Long clientId) {
+        return ticketMapper.toDTOList(ticketRepository.findByClientIdOrderByDateCreationDesc(clientId));
+    }
 }

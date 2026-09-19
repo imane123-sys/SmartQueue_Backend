@@ -20,6 +20,5 @@ public interface TicketService {
     TicketResponseDTO getTicketById(long id);
     String generateQR(String text)  throws Exception ;
      Page <TicketResponseDTO> getTicketsByEtablissmentid(StatutTicket statut ,Long id , Pageable pageable);
-
-
-    }
+     List<TicketResponseDTO> getTicketsByClientId(Long clientId);
+}

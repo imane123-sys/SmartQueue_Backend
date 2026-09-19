@@ -1,5 +1,6 @@
 package org.example.smartqueue.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,8 @@ import java.time.LocalDateTime;
 public class TicketResponseDTO implements Serializable {
     private Long id;
     private int numero;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+
     private LocalDateTime dateCreation;
     private String qrCode;
     private int position;

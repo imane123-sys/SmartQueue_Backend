@@ -11,6 +11,7 @@ import org.example.smartqueue.repository.ClientRepository;
 import org.example.smartqueue.repository.NotificationRepository;
 import org.example.smartqueue.repository.TicketRepository;
 import org.example.smartqueue.service.NotificationService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mail.SimpleMailMessage;
@@ -28,30 +29,49 @@ public  class NotificationServiceImp implements NotificationService {
     private final JavaMailSender mailSender;
     private final TicketRepository ticketRepository;
     private final ClientRepository clientRepository;
+
+    @Value("${spring.mail.username}")
+    private String fromEmail;
+
     @Async
     public void sendEmailAsync(String to, String subject, String body){
 
        try {
             SimpleMailMessage email = new SimpleMailMessage();
+            email.setFrom(fromEmail);
             email.setTo(to);
             email.setSubject(subject);
             email.setText(body);
             mailSender.send(email);
+            System.out.println("Email envoyé avec succès à " + to);
         }catch(Exception e){
-           System.out.println("Erreur lors de l'envoi de l'email à"+to+e.getMessage());
+           System.err.println("Erreur lors de l'envoi de l'email à " + to + " : " + e.getMessage());
 
        }
 
     }
 
     @Override
-     public void notificationConfirmation(Ticket ticket){
+    @Transactional
+    public void notificationConfirmation(Ticket ticket){
         String titre = "Confirmation de ticket";
-        String message =String.format("Votre ticket N° %s a été créé pour le service %s chez %s.",
-                ticket.getNumero(),ticket.getServices(),ticket.getServices().getEtablissement().getNom());
+        String nomService = ticket.getServices() != null ? ticket.getServices().getNom() : "";
+        String nomEtablissement = (ticket.getServices() != null && ticket.getServices().getEtablissement() != null)
+                ? ticket.getServices().getEtablissement().getNom() : "";
+
+        String message = String.format("Votre ticket N° %s a été créé pour le service %s chez %s.",
+                ticket.getNumero(), nomService, nomEtablissement);
         saveNotification(ticket,titre,message);
         sendEmailAsync(ticket.getClient().getEmail(),titre,message);
 
+    }
+
+    @Override
+    @Transactional
+    public void notificationConfirmation(long idTicket) {
+        Ticket ticket = ticketRepository.findById(idTicket)
+                .orElseThrow(() -> new RuntimeException("ce ticket n'existe pas "));
+        notificationConfirmation(ticket);
     }
     @Override
     public void notificationUrTurn(long idTicket, long idClient, Ticket ticket){

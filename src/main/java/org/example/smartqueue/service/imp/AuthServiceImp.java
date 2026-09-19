@@ -8,6 +8,7 @@ import org.example.smartqueue.dto.request.RegisterRequestDTO;
 import org.example.smartqueue.dto.response.AuthResponseDTO;
 import org.example.smartqueue.entity.Client;
 import org.example.smartqueue.entity.Etablissement;
+import org.example.smartqueue.entity.User;
 import org.example.smartqueue.enums.Role;
 import org.example.smartqueue.mapper.ClientMapper;
 import org.example.smartqueue.mapper.EtablissementMapper;
@@ -72,8 +73,8 @@ public  class  AuthServiceImp implements AuthService {
                         requestDTO.getPassword()
                 )
         );
-        UserDetails userDetails = (UserDetails) auth.getPrincipal();
-        String token = jwtService.generateToken(userDetails);
+        User user =  (User)auth.getPrincipal();
+        String token = jwtService.generateToken(user);
 
         return new AuthResponseDTO(token);
     }
