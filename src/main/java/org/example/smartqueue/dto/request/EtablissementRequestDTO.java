@@ -33,7 +33,6 @@ public class EtablissementRequestDTO {
     private String telephone;
     private String type;
 
-    private Double rayonKm;
 
     @JsonFormat(pattern = "HH:mm", shape = JsonFormat.Shape.STRING)
     @Schema(type = "string", example = "08:30")
