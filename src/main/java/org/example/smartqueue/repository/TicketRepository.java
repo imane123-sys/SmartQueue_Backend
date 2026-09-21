@@ -6,6 +6,7 @@ import org.example.smartqueue.entity.Ticket;
 import org.example.smartqueue.enums.StatutTicket;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -45,7 +46,12 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 //    ByServices_Etablissement_Id
 
     Page<Ticket>  findByStatutAndServices_Etablissement_Id(StatutTicket statut , Long EtablissementId, Pageable pageable);
-    Page<Ticket>  findByServices_Etablissement_Id(Long EtablissementId, Pageable pageable);
+    @Query(
+            value = "SELECT t FROM Ticket t WHERE t.services.etablissement.id = :etablissementId",
+            countQuery = "SELECT COUNT(t) FROM Ticket t WHERE t.services.etablissement.id = :etablissementId"
+    )
+    Page<Ticket>  findByServices_Etablissement_Id(@Param("etablissementId") Long etablissementId, Pageable pageable);
+
 
 
 }

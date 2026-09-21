@@ -1,10 +1,8 @@
 package org.example.smartqueue.service.imp;
-
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.smartqueue.dto.request.EtablissementRequestDTO;
-import org.example.smartqueue.dto.request.TicketRequestDTO;
 import org.example.smartqueue.dto.response.EtablissementResponseDTO;
-import org.example.smartqueue.dto.response.NotificationResponseDTO;
 import org.example.smartqueue.dto.response.TicketResponseDTO;
 import org.example.smartqueue.entity.Etablissement;
 import org.example.smartqueue.entity.Notification;

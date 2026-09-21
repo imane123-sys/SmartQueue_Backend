@@ -92,7 +92,7 @@ public class EtablissementController {
     @GetMapping("ticket/etablissement/{idEtablissement}")
     public Page<TicketResponseDTO> getTicketsEtablissement(
             @PathVariable Long idEtablissement,
-            @PageableDefault(page=0 , size=10 , sort="tempsEstime",direction= Sort.Direction.ASC)Pageable pageable) {
+            @PageableDefault(page=0 , size=10 , sort="dateCreation",direction= Sort.Direction.ASC)Pageable pageable) {
 
         return etablissementService.getTicketsEtablissement(idEtablissement, pageable);
     }
