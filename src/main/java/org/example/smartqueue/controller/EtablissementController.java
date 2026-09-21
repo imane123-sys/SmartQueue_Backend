@@ -5,7 +5,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.smartqueue.dto.request.EtablissementRequestDTO;
 import org.example.smartqueue.dto.response.EtablissementResponseDTO;
+import org.example.smartqueue.dto.response.TicketResponseDTO;
 import org.example.smartqueue.service.EtablissementService;
+import org.example.smartqueue.service.TicketService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -23,7 +25,6 @@ import java.util.List;
 public class EtablissementController {
 
     private final EtablissementService etablissementService;
-
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<EtablissementResponseDTO> createEtablissement(
@@ -87,5 +88,12 @@ public class EtablissementController {
         etablissementService.deleteEtablissement(id);
 
         return ResponseEntity.noContent().build();
+    }
+    @GetMapping("ticket/etablissement/{idEtablissement}")
+    public Page<TicketResponseDTO> getTicketsEtablissement(
+            @PathVariable Long idEtablissement,
+            @PageableDefault(page=0 , size=10 , sort="tempsEstime",direction= Sort.Direction.ASC)Pageable pageable) {
+
+        return etablissementService.getTicketsEtablissement(idEtablissement, pageable);
     }
 }

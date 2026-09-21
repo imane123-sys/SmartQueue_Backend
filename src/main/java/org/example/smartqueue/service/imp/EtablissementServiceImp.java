@@ -2,14 +2,19 @@ package org.example.smartqueue.service.imp;
 
 import lombok.RequiredArgsConstructor;
 import org.example.smartqueue.dto.request.EtablissementRequestDTO;
+import org.example.smartqueue.dto.request.TicketRequestDTO;
 import org.example.smartqueue.dto.response.EtablissementResponseDTO;
 import org.example.smartqueue.dto.response.NotificationResponseDTO;
+import org.example.smartqueue.dto.response.TicketResponseDTO;
 import org.example.smartqueue.entity.Etablissement;
 import org.example.smartqueue.entity.Notification;
+import org.example.smartqueue.entity.Ticket;
 import org.example.smartqueue.enums.Role;
 import org.example.smartqueue.mapper.ClientMapper;
 import org.example.smartqueue.mapper.EtablissementMapper;
+import org.example.smartqueue.mapper.TicketMapper;
 import org.example.smartqueue.repository.EtablissementRepository;
+import org.example.smartqueue.repository.TicketRepository;
 import org.example.smartqueue.service.EtablissementService;
 import org.example.smartqueue.service.GeocodingService;
 import org.springframework.data.domain.Page;
@@ -26,6 +31,10 @@ public  class EtablissementServiceImp implements EtablissementService {
     private final ClientMapper clientMapper;
     private final GeocodingService geocodingService;
     private final PasswordEncoder passwordEncoder;
+    private final TicketRepository ticketRepository;
+    private final TicketMapper ticketMapper;
+
+
 
     @Override
     public List<EtablissementResponseDTO> findEtablissementsProchesParServices(String serviceNom, double latitude, double longitude) {
@@ -99,6 +108,15 @@ public  class EtablissementServiceImp implements EtablissementService {
          etablissementRepository.deleteById(id);
 
     }
+    @Transactional(readOnly = true)
+    @Override
+    public    Page<TicketResponseDTO>getTicketsEtablissement(Long idEtablissement, Pageable pageable){
+        Page<Ticket> tickets = ticketRepository.findByServices_Etablissement_Id(idEtablissement,pageable);
+        return  tickets.map(ticketMapper::toResponseDTO);
+
+
+    }
+
 
 
 

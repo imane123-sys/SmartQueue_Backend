@@ -1,7 +1,4 @@
--- =========================================================
--- 1. INSERTION DANS LA TABLE USERS
--- NOUVEAUX ETABLISSEMENTS A SOUK SEBT OULAD NEMMA
--- =========================================================
+
 
 INSERT INTO users (nom, email, password, role)
 VALUES
@@ -43,10 +40,6 @@ VALUES
     );
 
 
--- =========================================================
--- 2. INSERTION DANS LA TABLE ETABLISSEMENTS
--- rayon_km = 10.0 km
--- =========================================================
 
 INSERT INTO etablissements
 (id, adresse, telephone, type, latitude, longitude,

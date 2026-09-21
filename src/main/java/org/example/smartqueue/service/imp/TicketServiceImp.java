@@ -121,7 +121,6 @@ public class TicketServiceImp implements TicketService {
         status.put("countStatut_TERMINE",ticketRepository.countTicketsEtablissemnt(id,StatutTicket.TERMINE));
         status.put("countStatut_ABSENT",ticketRepository.countTicketsEtablissemnt(id,StatutTicket.ABSENT));
         return status;
-
     }
     @Override
      public TicketResponseDTO suivreTicket(long id){

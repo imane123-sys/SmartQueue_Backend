@@ -45,5 +45,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 //    ByServices_Etablissement_Id
 
     Page<Ticket>  findByStatutAndServices_Etablissement_Id(StatutTicket statut , Long EtablissementId, Pageable pageable);
+    Page<Ticket>  findByServices_Etablissement_Id(Long EtablissementId, Pageable pageable);
+
 
 }
