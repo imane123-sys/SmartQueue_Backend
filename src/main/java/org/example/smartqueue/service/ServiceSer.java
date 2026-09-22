@@ -14,6 +14,7 @@ public interface ServiceSer {
     ServiceResponseDTO updateService(long id,ServiceRequestDTO service);
     void delete(long id);
     List<ServiceResponseDTO>getALlServices();
+    List<ServiceResponseDTO>getAllServicesByIdEtablissement(Long idEtablissement);
 
 
 }

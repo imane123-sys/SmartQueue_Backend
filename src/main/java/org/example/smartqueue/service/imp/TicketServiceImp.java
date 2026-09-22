@@ -104,7 +104,8 @@ public class TicketServiceImp implements TicketService {
     public TicketResponseDTO modifierStatut(long ticketid,StatutTicket nouveauStatut){
         Ticket ticket= ticketRepository.findById(ticketid).orElseThrow(()->new RuntimeException("ce ticket n'existe pas"));
         ticket.setStatut(nouveauStatut);
-        return ticketMapper.toResponseDTO(ticket);
+
+        return ticketMapper.toResponseDTO(ticketRepository.save(ticket));
 
     }
     @Override

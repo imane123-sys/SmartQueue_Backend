@@ -58,6 +58,13 @@ public  class ServiceImp implements ServiceSer {
         List<Services> services= serviceRepository.findAll();
         return serviceMapper.toDTOList(services);
     }
+    @Override
+    public    List<ServiceResponseDTO>getAllServicesByIdEtablissement(Long idEtablissement){
+        List<Services> services = serviceRepository.findByEtablissementId(idEtablissement);
+        return serviceMapper.toDTOList(services);
+
+    }
+
 }
 
 

@@ -77,6 +77,11 @@ public class ServiceController {
     public ResponseEntity<List<ServiceResponseDTO>>getAllServices(){
         return ResponseEntity.ok(serviceService.getALlServices());
     }
+    @GetMapping("etablissement/{idEtablissement}")
+    public ResponseEntity<List<ServiceResponseDTO>> getAllServicesByIdEtablissement(@PathVariable Long idEtablissement){
+        return ResponseEntity.ok(serviceService.getAllServicesByIdEtablissement(idEtablissement));
+    }
+
 
 }
 
