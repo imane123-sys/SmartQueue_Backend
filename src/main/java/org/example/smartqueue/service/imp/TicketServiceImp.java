@@ -89,7 +89,8 @@ public class TicketServiceImp implements TicketService {
              throw new RuntimeException("Ce ticket ne vous appartient pas");
          }
         ticket.setStatut(StatutTicket.ABSENT);
-        return ticketMapper.toResponseDTO(ticket);
+        Ticket ticket1= ticketRepository.save(ticket);
+        return ticketMapper.toResponseDTO(ticket1);
 
     }
     @Override
