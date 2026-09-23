@@ -31,7 +31,6 @@ class ServiceImpTest {
     @InjectMocks
     private ServiceImp serviceImp;
 
-    // --- createService() Tests ---
 
     @Test
     @DisplayName("createService: should link etablissement, set duration and save service")
@@ -70,7 +69,6 @@ class ServiceImpTest {
         verify(serviceRepository, never()).save(any());
     }
 
-    // --- updateService() Tests ---
 
     @Test
     @DisplayName("updateService: should update existing service and return DTO")

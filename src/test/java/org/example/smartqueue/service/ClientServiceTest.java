@@ -31,7 +31,6 @@ class ClientServiceTest {
     @InjectMocks
     private ClientServiceImp clientService;
 
-    // --- createClient() Tests ---
 
     @Test
     @DisplayName("createClient: should encode password, set CLIENT role and save")
@@ -67,7 +66,6 @@ class ClientServiceTest {
         assertThrows(RuntimeException.class, () -> clientService.createClient(request));
     }
 
-    // --- getClientById() Tests ---
 
     @Test
     @DisplayName("getClientById: should return ClientResponseDTO when client is found")

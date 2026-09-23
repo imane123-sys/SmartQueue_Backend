@@ -38,11 +38,9 @@ class NotificationServiceTest {
 
     @BeforeEach
     void setUp() {
-        // Set the @Value("${spring.mail.username}") property directly
         ReflectionTestUtils.setField(notificationService, "fromEmail", "noreply@smartqueue.com");
     }
 
-    // --- notificationConfirmation() Tests ---
 
     @Test
     @DisplayName("notificationConfirmation: should save notification and send async email")
@@ -87,7 +85,6 @@ class NotificationServiceTest {
         verify(notificationRepository).save(any(Notification.class));
     }
 
-    // --- notificationUrTurn() Tests ---
 
     @Test
     @DisplayName("notificationUrTurn: should save turn notification when ticket exists")

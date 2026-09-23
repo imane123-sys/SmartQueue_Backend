@@ -39,7 +39,6 @@ class TicketServiceTest {
     @InjectMocks
     private TicketServiceImp ticketService;
 
-    // --- reserveTicket() Tests ---
 
     @Test
     @DisplayName("reserveTicket: should reserve ticket, generate QR and notify client")
@@ -89,7 +88,6 @@ class TicketServiceTest {
         verify(ticketRepository, never()).save(any());
     }
 
-    // --- annulerTicket() Tests ---
 
     @Test
     @DisplayName("annulerTicket: should mark ticket as ABSENT when client is owner")
@@ -134,7 +132,6 @@ class TicketServiceTest {
         verify(ticketRepository, never()).save(any());
     }
 
-    // --- appelerTicketSuivant() Tests ---
 
     @Test
     @DisplayName("appelerTicketSuivant: should change status of next ticket to EN_COURS")

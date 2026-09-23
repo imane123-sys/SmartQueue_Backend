@@ -33,7 +33,6 @@ class EtablissementServiceTest {
     @InjectMocks
     private EtablissementServiceImp etablissementService;
 
-    // --- createEtablissement() Tests ---
 
     @Test
     @DisplayName("createEtablissement: should fetch coordinates, encode password and save")

@@ -105,7 +105,6 @@ public class TicketServiceImp implements TicketService {
     public TicketResponseDTO modifierStatut(long ticketid,StatutTicket nouveauStatut){
         Ticket ticket= ticketRepository.findById(ticketid).orElseThrow(()->new RuntimeException("ce ticket n'existe pas"));
         ticket.setStatut(nouveauStatut);
-
         return ticketMapper.toResponseDTO(ticketRepository.save(ticket));
 
     }
@@ -131,9 +130,14 @@ public class TicketServiceImp implements TicketService {
          ticket.setPosition((int)personBefore+1);
          ticket.setTempsEstime(ticket.getServices().getDureeMoyenne() *ticket.getPosition());
          return ticketMapper.toResponseDTO(ticket);
-
-
      }
+     @Override
+      public TicketResponseDTO modifierTempsEstime(long idTicket,int tempsEstime){
+         Ticket ticket= ticketRepository.findById(idTicket).orElseThrow(()->new RuntimeException("ce ticket n'existe pas"));
+         ticket.setTempsEstime(tempsEstime);
+         return ticketMapper.toResponseDTO(ticketRepository.save(ticket));
+     }
+
      @Override
     public Page<TicketResponseDTO> getTicketsByEtablissmentid(StatutTicket statut,Long id , Pageable pageable){
         Page<Ticket> tickets=ticketRepository.findByStatutAndServices_Etablissement_Id(StatutTicket.EN_ATTENTE,id,pageable);

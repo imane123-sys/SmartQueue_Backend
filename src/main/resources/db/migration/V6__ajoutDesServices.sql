@@ -40,9 +40,6 @@ VALUES
     'ETABLISSEMENT'
 );
 
--- =========================================================
--
--- =========================================================
 INSERT INTO etablissements (id, adresse, telephone, type, latitude, longitude, rayon_km, horaire_ouverture, horaire_fermeture)
 SELECT id, 'Boulevard Hassan II, Béni Mellal', '0523482100', 'Banque', 32.3385, -6.3482, 10.0, '08:15:00', '15:30:00'
 FROM users WHERE email = 'attijari.benimellal@smartqueue.ma'

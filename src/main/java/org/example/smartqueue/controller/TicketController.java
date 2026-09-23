@@ -115,4 +115,10 @@ public class TicketController {
      public ResponseEntity<List<TicketResponseDTO>> getTicketsByClientId(@PathVariable Long clientId) {
          return ResponseEntity.ok(ticketService.getTicketsByClientId(clientId));
      }
+
+     @PutMapping("/update/tempsEstime/{idTicket}")
+//     @PreAuthorize("hasAnyAuthority('CLIENT', 'ADMIN')")
+     public ResponseEntity<TicketResponseDTO> updateTempsEstime(@PathVariable Long idTicket,@RequestParam int tempestime) {
+         return ResponseEntity.ok(ticketService.modifierTempsEstime(idTicket,tempestime));
+     }
 }

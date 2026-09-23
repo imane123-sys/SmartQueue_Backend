@@ -21,7 +21,6 @@ class JwtServiceTest {
         ReflectionTestUtils.setField(jwtService, "jwtExpirationMs", 3600000);
     }
 
-    // --- generateToken & getEmailFromToken Tests ---
 
     @Test
     @DisplayName("generateToken: should generate a non-empty JWT for user")
@@ -51,7 +50,6 @@ class JwtServiceTest {
         assertEquals("client@domain.com", email);
     }
 
-    // --- validateToken Tests ---
 
     @Test
     @DisplayName("validateToken: should return true for a valid generated token")
