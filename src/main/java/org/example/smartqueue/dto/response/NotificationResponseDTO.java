@@ -14,6 +14,7 @@ public class NotificationResponseDTO {
     private String titre;
     private LocalDateTime dateEnvoi;
     private StatutNotification statut;
+    private org.example.smartqueue.enums.Role destinataireRole;
 
     private Long ticketId;
     private int numeroTicket;

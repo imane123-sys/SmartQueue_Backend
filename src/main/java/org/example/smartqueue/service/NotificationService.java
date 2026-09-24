@@ -17,7 +17,6 @@ public interface NotificationService {
     Page<NotificationResponseDTO>getNotificationsByClient(long idClient,Pageable pageable);
     Page <NotificationResponseDTO> getNotificationsTicketsEtablissement(long idEtablissement, Pageable pageable);
     void sendEmailAsync(String to, String subject, String body);
-     Notification saveNotification(Ticket ticket, String titre, String message);
-
-
+    Notification saveNotification(Ticket ticket, String titre, String message);
+    Notification saveNotification(Ticket ticket, String titre, String message, org.example.smartqueue.enums.Role destinataireRole);
 }

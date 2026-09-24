@@ -56,16 +56,10 @@ public  class NotificationServiceImp implements NotificationService {
     @Override
     @Transactional
     public void notificationConfirmation(Ticket ticket){
-        String titre = "Confirmation de ticket";
-        String nomService = ticket.getServices() != null ? ticket.getServices().getNom() : "";
-        String nomEtablissement = (ticket.getServices() != null && ticket.getServices().getEtablissement() != null)
-                ? ticket.getServices().getEtablissement().getNom() : "";
-
-        String message = String.format("Votre ticket N° %s a été créé pour le service %s chez %s.",
-                ticket.getNumero(), nomService, nomEtablissement);
-        saveNotification(ticket,titre,message);
-        sendEmailAsync(ticket.getClient().getEmail(),titre,message);
-
+        String titre = "Ticket créé";
+        String message = "Votre ticket a été créé.";
+        saveNotification(ticket, titre, message, org.example.smartqueue.enums.Role.CLIENT);
+        sendEmailAsync(ticket.getClient().getEmail(), titre, message);
     }
 
     @Override
@@ -75,17 +69,20 @@ public  class NotificationServiceImp implements NotificationService {
                 .orElseThrow(() -> new RuntimeException("ce ticket n'existe pas "));
         notificationConfirmation(ticket);
     }
+
     @Override
     @Transactional
     public void notificationUrTurn(long idTicket, long idClient, Ticket ticket){
-        Ticket tickets = ticketRepository.findById(idTicket).orElseThrow(()->new RuntimeException("ce ticket n'existe pas "));
+        Ticket t = (ticket != null) ? ticket : ticketRepository.findById(idTicket)
+                .orElseThrow(() -> new RuntimeException("ce ticket n'existe pas "));
         saveNotification(
-                tickets,
-                "C'est votre tour !",
-                "Votre ticket est maintenant appelé. Veuillez vous présenter à l'établissement."
+                t,
+                "C'est votre tour",
+                "C'est votre tour.",
+                org.example.smartqueue.enums.Role.CLIENT
         );
-
     }
+
     @Override
     @Transactional
     public void sendTurnApproachingNotification(long idTicket, long position, long tempsEstime) {
@@ -93,9 +90,9 @@ public  class NotificationServiceImp implements NotificationService {
                 .orElseThrow(() -> new RuntimeException("ce ticket n'existe pas "));
         saveNotification(
                 ticket,
-                "Votre tour s'approche !",
-                "Il reste environ " + position +
-                        " personnes avant votre tour. Votre tour est prévu dans environ " + tempsEstime + " minutes."
+                "Tour approche",
+                "Votre tour approche.",
+                org.example.smartqueue.enums.Role.CLIENT
         );
     }
 
@@ -110,48 +107,46 @@ public  class NotificationServiceImp implements NotificationService {
 
         saveNotification(
                 ticket,
-                "Annulation de ticket",
-                "Le ticket N° " + ticket.getNumero() + " a été annulé."
+                "Ticket annulé",
+                "Un ticket a été annulé.",
+                org.example.smartqueue.enums.Role.ETABLISSEMENT
         );
     }
 
+    @Override
     @Transactional
     public Notification saveNotification(Ticket ticket, String titre, String message) {
+        return saveNotification(ticket, titre, message, org.example.smartqueue.enums.Role.CLIENT);
+    }
 
+    @Override
+    @Transactional
+    public Notification saveNotification(Ticket ticket, String titre, String message, org.example.smartqueue.enums.Role destinataireRole) {
         Notification notification = new Notification();
         notification.setTitre(titre);
         notification.setMessage(message);
         notification.setDateEnvoi(LocalDateTime.now());
         notification.setStatut(StatutNotification.ENVOYE);
         notification.setTicket(ticket);
+        notification.setDestinataireRole(destinataireRole);
+
         Notification saved = notificationRepository.save(notification);
 
         Object payload = (notificationMapper != null) ? notificationMapper.toResponseDTO(saved) : saved;
 
-        if (messagingTemplate != null) {
-            try {
-                if (ticket != null && ticket.getClient() != null && ticket.getClient().getId() != null) {
-                    long idClient = ticket.getClient().getId();
-                    messagingTemplate.convertAndSend(
-                            "/topic/notifications/" + idClient,
-                            payload
-                    );
-                }
-
-                if (ticket != null && ticket.getServices() != null && ticket.getServices().getEtablissement() != null && ticket.getServices().getEtablissement().getId() != null) {
-                    long idEtablissement = ticket.getServices().getEtablissement().getId();
-                    messagingTemplate.convertAndSend(
-                            "/topic/notifications/etablissement/" + idEtablissement,
-                            payload
-                    );
-                }
-            } catch (Exception e) {
-                System.err.println("Erreur envoi WebSocket notification: " + e.getMessage());
+        try {
+            if (destinataireRole == org.example.smartqueue.enums.Role.CLIENT) {
+                Long clientId = ticket.getClient().getId();
+                messagingTemplate.convertAndSend("/topic/notifications/" + clientId, payload);
+            } else if (destinataireRole == org.example.smartqueue.enums.Role.ETABLISSEMENT) {
+                Long etablissementId = ticket.getServices().getEtablissement().getId();
+                messagingTemplate.convertAndSend("/topic/notifications/etablissement/" + etablissementId, payload);
             }
+        } catch (Exception e) {
+            System.err.println("Erreur WebSocket: " + e.getMessage());
         }
 
         return saved;
-
     }
     @Override
     public Page <NotificationResponseDTO> getNotificationsTicketsEtablissement(long idEtablissement, Pageable pageable){

@@ -64,6 +64,7 @@ public class TicketServiceImp implements TicketService {
 
         Ticket savedTicket = ticketRepository.save(tickets);
         notificationService.notificationConfirmation(savedTicket);
+        notificationService.saveNotification(savedTicket, "Nouveau ticket", "Un nouveau ticket a été créé.", org.example.smartqueue.enums.Role.ETABLISSEMENT);
         return ticketMapper.toResponseDTO(savedTicket);
 
     }
@@ -98,14 +99,20 @@ public class TicketServiceImp implements TicketService {
         Services services = serviceRepository.findById(serviceId).orElseThrow(()->new RuntimeException("ce service n'appartient pas à cet établissement"));
         Ticket ticket = ticketRepository.findByServicesIdAndStatutOrderByPositionAsc(services.getId(),StatutTicket.EN_ATTENTE).get(0);
         ticket.setStatut(StatutTicket.EN_COURS);
-        return ticketMapper.toResponseDTO( ticketRepository.save(ticket));
+        Ticket saved = ticketRepository.save(ticket);
+        notificationService.notificationUrTurn(saved.getId(), saved.getClient().getId(), saved);
+        return ticketMapper.toResponseDTO(saved);
 
     }
     @Override
     public TicketResponseDTO modifierStatut(long ticketid,StatutTicket nouveauStatut){
         Ticket ticket= ticketRepository.findById(ticketid).orElseThrow(()->new RuntimeException("ce ticket n'existe pas"));
         ticket.setStatut(nouveauStatut);
-        return ticketMapper.toResponseDTO(ticketRepository.save(ticket));
+        Ticket saved = ticketRepository.save(ticket);
+        if (nouveauStatut == StatutTicket.EN_COURS) {
+            notificationService.notificationUrTurn(saved.getId(), saved.getClient().getId(), saved);
+        }
+        return ticketMapper.toResponseDTO(saved);
 
     }
     @Override

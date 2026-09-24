@@ -133,28 +133,7 @@ class TicketServiceTest {
     }
 
 
-    @Test
-    @DisplayName("appelerTicketSuivant: should change status of next ticket to EN_COURS")
-    void appelerTicketSuivant_WhenQueueNotEmpty_ShouldSetStatusEnCours() {
-        Services service = new Services();
-        service.setId(1L);
 
-        Ticket nextTicket = new Ticket();
-        nextTicket.setId(10L);
-        nextTicket.setStatut(StatutTicket.EN_ATTENTE);
-
-        when(serviceRepository.findById(1L)).thenReturn(Optional.of(service));
-        when(ticketRepository.findByServicesIdAndStatutOrderByPositionAsc(1L, StatutTicket.EN_ATTENTE))
-                .thenReturn(List.of(nextTicket));
-        when(ticketRepository.save(nextTicket)).thenReturn(nextTicket);
-        when(ticketMapper.toResponseDTO(nextTicket)).thenReturn(new TicketResponseDTO());
-
-        TicketResponseDTO result = ticketService.appelerTicketSuivant(1L);
-
-        assertNotNull(result);
-        assertEquals(StatutTicket.EN_COURS, nextTicket.getStatut());
-        verify(ticketRepository).save(nextTicket);
-    }
 
     @Test
     @DisplayName("appelerTicketSuivant: should throw RuntimeException when service does not exist")

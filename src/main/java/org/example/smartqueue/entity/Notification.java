@@ -22,6 +22,11 @@ public class Notification {
 
     @Enumerated(EnumType.STRING)
     private StatutNotification statut;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "destinataire_role")
+    private org.example.smartqueue.enums.Role destinataireRole;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ticket_id", nullable = false)
     private Ticket ticket;
