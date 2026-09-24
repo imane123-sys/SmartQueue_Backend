@@ -3,12 +3,14 @@ package org.example.smartqueue.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.smartqueue.dto.response.NotificationResponseDTO;
 import org.example.smartqueue.entity.Notification;
+import org.example.smartqueue.repository.ClientRepository;
 import org.example.smartqueue.service.NotificationService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +25,7 @@ public class NotificationController {
 
 
 
+
     @PostMapping({"/confirmation/{idTicket}"})
     @PreAuthorize("hasAnyAuthority('CLIENT', 'ETABLISSEMENT', 'ADMIN')")
     public ResponseEntity<Void> notificationConfirmation(
@@ -33,7 +36,7 @@ public class NotificationController {
     }
 
     @PutMapping("/annuler-ticket/{id}")
-    @PreAuthorize("hasAuthority('CLIENT')")
+    @PreAuthorize("hasAnyAuthority('CLIENT', 'ETABLISSEMENT', 'ADMIN')")
     public ResponseEntity<Void> notificationAnnulationTicket(
             @PathVariable long id) {
 
@@ -42,7 +45,7 @@ public class NotificationController {
     }
 
     @PostMapping("/tour/{idTicket}/{idClient}")
-    @PreAuthorize("hasAuthority('ETABLISSEMENT')")
+    @PreAuthorize("hasAnyAuthority('CLIENT', 'ETABLISSEMENT', 'ADMIN')")
     public ResponseEntity<Void> notificationUrTurn(
             @PathVariable long idTicket,
             @PathVariable long idClient) {
@@ -52,7 +55,7 @@ public class NotificationController {
     }
 
     @PostMapping("/tour-approche/{idTicket}")
-    @PreAuthorize("hasAuthority('ETABLISSEMENT')")
+    @PreAuthorize("hasAnyAuthority('CLIENT', 'ETABLISSEMENT', 'ADMIN')")
     public ResponseEntity<Void> sendTurnApproachingNotification(
             @PathVariable long idTicket,
             @RequestParam long position,
@@ -65,25 +68,20 @@ public class NotificationController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/Notifications/tickets/Etablissemnt/{idEtablissement}")
-    public ResponseEntity<Page<NotificationResponseDTO>> getNotificationsTicketsEtablissement(@PathVariable long idEtablissement, @PageableDefault(page = 0, size = 10, sort = "dateEnvoi", direction = Sort.Direction.DESC) Pageable pageable) {
+    @GetMapping({"/etablissement/{idEtablissement}", "/Notifications/tickets/Etablissemnt/{idEtablissement}"})
+    @PreAuthorize("hasAnyAuthority('ADMIN','ETABLISSEMENT')")
+    public ResponseEntity<Page<NotificationResponseDTO>> getNotificationsTicketsEtablissement(
+            @PathVariable long idEtablissement,
+            @PageableDefault(page = 0, size = 10, sort = "dateEnvoi", direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok(notificationService.getNotificationsTicketsEtablissement(idEtablissement, pageable));
-
-
     }
-    @GetMapping("/Notifications/tickets/Client/{idClient}")
+
+    @GetMapping({"/client/{idClient}", "/Notifications/tickets/Client/{idClient}"})
     @PreAuthorize("hasAnyAuthority('ADMIN','CLIENT')")
-    public ResponseEntity<Page<NotificationResponseDTO>>getNotificationsTicketsClient(@PathVariable long idClient, @PageableDefault(
-            page = 0,
-            size = 10,
-            sort = "dateEnvoi",
-            direction = Sort.Direction.DESC
-    )    Pageable pageable)
-    {
-        return ResponseEntity.ok(
-                notificationService.getNotificationsByClient(idClient,pageable));
-
-
+    public ResponseEntity<Page<NotificationResponseDTO>> getNotificationsTicketsClient(
+            @PathVariable long idClient,
+            @PageableDefault(page = 0, size = 10, sort = "dateEnvoi", direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok(notificationService.getNotificationsByClient(idClient, pageable));
     }
 
 

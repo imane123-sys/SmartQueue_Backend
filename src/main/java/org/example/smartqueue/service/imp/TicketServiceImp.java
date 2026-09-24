@@ -123,14 +123,7 @@ public class TicketServiceImp implements TicketService {
         status.put("countStatut_ABSENT",ticketRepository.countTicketsEtablissemnt(id,StatutTicket.ABSENT));
         return status;
     }
-    @Override
-     public TicketResponseDTO suivreTicket(long id){
-         Ticket ticket= ticketRepository.findById(id).orElseThrow(()->new RuntimeException("ce ticket n'existe pas"));
-         long personBefore = ticketRepository.countByServicesIdAndStatutAndPositionLessThan(ticket.getServices().getId(),ticket.getStatut(),ticket.getPosition());
-         ticket.setPosition((int)personBefore+1);
-         ticket.setTempsEstime(ticket.getServices().getDureeMoyenne() *ticket.getPosition());
-         return ticketMapper.toResponseDTO(ticket);
-     }
+
      @Override
       public TicketResponseDTO modifierTempsEstime(long idTicket,int tempsEstime){
          Ticket ticket= ticketRepository.findById(idTicket).orElseThrow(()->new RuntimeException("ce ticket n'existe pas"));
@@ -147,5 +140,38 @@ public class TicketServiceImp implements TicketService {
     @Override
     public List<TicketResponseDTO> getTicketsByClientId(Long clientId) {
         return ticketMapper.toDTOList(ticketRepository.findByClientIdOrderByDateCreationDesc(clientId));
+    }
+    @Override
+    public TicketResponseDTO suivreTicket(long id) {
+
+        Ticket ticket = ticketRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("ce ticket n'existe pas"));
+
+        long personBefore = ticketRepository.countByServicesIdAndStatutAndPositionLessThan(
+                ticket.getServices().getId(),
+                ticket.getStatut(),
+                ticket.getPosition()
+        );
+
+        ticket.setPosition((int) personBefore + 1);
+
+        ticket.setTempsEstime(
+                ticket.getServices().getDureeMoyenne() * ticket.getPosition()
+        );
+
+        long total = ticketRepository.countByServicesIdAndStatut(
+                ticket.getServices().getId(),
+                ticket.getStatut()
+        );
+
+        if (total > 0 && personBefore <= total / 2) {
+            notificationService.sendTurnApproachingNotification(
+                    ticket.getId(),
+                    ticket.getPosition(),
+                    ticket.getTempsEstime()
+            );
+        }
+
+        return ticketMapper.toResponseDTO(ticket);
     }
 }

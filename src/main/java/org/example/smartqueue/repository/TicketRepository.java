@@ -52,6 +52,6 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     )
     Page<Ticket>  findByServices_Etablissement_Id(@Param("etablissementId") Long etablissementId, Pageable pageable);
 
-
+    long countByServicesIdAndStatut(Long serviceId, StatutTicket statut);
 
 }
