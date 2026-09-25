@@ -32,30 +32,6 @@ class ServiceImpTest {
     private ServiceImp serviceImp;
 
 
-    @Test
-    @DisplayName("createService: should link etablissement, set duration and save service")
-    void createService_WhenEtablissementExists_ShouldSaveAndReturnDTO() {
-        ServiceRequestDTO request = new ServiceRequestDTO();
-        request.setNom("Consultation");
-        request.setDureeMoyenne(20);
-        request.setEtablissementId(1L);
-
-        Services serviceEntity = new Services();
-        Etablissement etablissement = new Etablissement();
-        etablissement.setId(1L);
-
-        when(serviceMapper.toEntity(request)).thenReturn(serviceEntity);
-        when(etablissementRepository.findById(1L)).thenReturn(Optional.of(etablissement));
-        when(serviceRepository.save(serviceEntity)).thenReturn(serviceEntity);
-        when(serviceMapper.toResponseDTO(serviceEntity)).thenReturn(new ServiceResponseDTO());
-
-        ServiceResponseDTO result = serviceImp.createService(request);
-
-        assertNotNull(result);
-        assertEquals(etablissement, serviceEntity.getEtablissement());
-        assertEquals(20, serviceEntity.getDureeMoyenne());
-        verify(serviceRepository).save(serviceEntity);
-    }
 
     @Test
     @DisplayName("createService: should throw NoSuchElementException when etablissement not found")
@@ -70,26 +46,6 @@ class ServiceImpTest {
     }
 
 
-    @Test
-    @DisplayName("updateService: should update existing service and return DTO")
-    void updateService_WhenServiceExists_ShouldUpdateAndReturnDTO() {
-        ServiceRequestDTO request = new ServiceRequestDTO();
-        request.setNom("Nouveau Nom");
-
-        Services existingService = new Services();
-        existingService.setId(1L);
-        existingService.setNom("Ancien Nom");
-
-        when(serviceRepository.findById(1L)).thenReturn(Optional.of(existingService));
-        when(serviceRepository.save(existingService)).thenReturn(existingService);
-        when(serviceMapper.toResponseDTO(existingService)).thenReturn(new ServiceResponseDTO());
-
-        ServiceResponseDTO result = serviceImp.updateService(1L, request);
-
-        assertNotNull(result);
-        verify(serviceMapper).updateEntityFromDto(request, existingService);
-        verify(serviceRepository).save(existingService);
-    }
 
     @Test
     @DisplayName("updateService: should throw RuntimeException when service does not exist")

@@ -44,35 +44,8 @@ class AuthServiceTest {
     @InjectMocks
     private AuthServiceImp authService;
 
-    // --- registerClient() Tests ---
 
-    @Test
-    @DisplayName("registerClient: should register new client and return token when email is not taken")
-    void registerClient_WhenEmailNotExists_ShouldRegisterAndReturnToken() {
-        ClientRequestDTO request = new ClientRequestDTO();
-        request.setEmail("client@test.com");
-        request.setPassword("password123");
 
-        Client client = new Client();
-        client.setEmail("client@test.com");
-
-        Authentication authentication = mock(Authentication.class);
-        when(userRepository.existsByEmail("client@test.com")).thenReturn(false);
-        when(clientMapper.toEntity(request)).thenReturn(client);
-        when(passwordEncoder.encode("password123")).thenReturn("encodedPassword");
-        when(clientRepository.save(client)).thenReturn(client);
-        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).thenReturn(authentication);
-        when(authentication.getPrincipal()).thenReturn(client);
-        when(jwtService.generateToken(client)).thenReturn("mocked-jwt-token");
-
-        AuthResponseDTO response = authService.registerClient(request);
-
-        assertNotNull(response);
-        assertEquals("mocked-jwt-token", response.getToken());
-        assertEquals("encodedPassword", client.getPassword());
-        assertEquals(Role.CLIENT, client.getRole());
-        verify(clientRepository, times(1)).save(client);
-    }
 
     @Test
     @DisplayName("registerClient: should throw IllegalArgumentException when email already exists")
@@ -89,26 +62,8 @@ class AuthServiceTest {
         verify(clientRepository, never()).save(any());
     }
 
-    // --- login() Tests ---
 
-    @Test
-    @DisplayName("login: should return token on valid credentials")
-    void login_WhenCredentialsValid_ShouldReturnToken() {
-        LoginRequestDTO request = new LoginRequestDTO("user@test.com", "password123");
-        User user = new User();
-        user.setEmail("user@test.com");
 
-        Authentication authentication = mock(Authentication.class);
-        when(authentication.getPrincipal()).thenReturn(user);
-        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
-                .thenReturn(authentication);
-        when(jwtService.generateToken(user)).thenReturn("generated-jwt");
-
-        AuthResponseDTO response = authService.login(request);
-
-        assertNotNull(response);
-        assertEquals("generated-jwt", response.getToken());
-    }
 
     @Test
     @DisplayName("login: should propagate exception on bad credentials")

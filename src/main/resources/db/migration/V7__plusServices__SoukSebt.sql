@@ -128,17 +128,12 @@ FROM users
 WHERE email = 'clinique.alamal.souksebt@smartqueue.ma';
 
 
--- =========================================================
--- 3. INSERTION DANS LA TABLE SERVICES
--- Mêmes services que pour Béni Mellal
--- =========================================================
+
 
 INSERT INTO services
 (nom, description, duree_moyenne, etablissement_id)
 
--- =========================================================
--- SERVICES ATTijariwafa Bank
--- =========================================================
+
 
 SELECT 'Services bancaires',
        'Opérations bancaires courantes et virements',
@@ -156,10 +151,6 @@ SELECT 'Retrait bancaire',
 FROM users
 WHERE email = 'attijari.souksebt@smartqueue.ma'
 
-
--- =========================================================
--- SERVICES CIH BANK
--- =========================================================
 
 UNION ALL
 
@@ -180,10 +171,6 @@ FROM users
 WHERE email = 'cih.souksebt@smartqueue.ma'
 
 
--- =========================================================
--- SERVICES CREDIT AGRICOLE
--- =========================================================
-
 UNION ALL
 
 SELECT 'Services bancaires',
@@ -203,9 +190,7 @@ FROM users
 WHERE email = 'creditagricole.souksebt@smartqueue.ma'
 
 
--- =========================================================
--- SERVICES SOCIETE GENERALE
--- =========================================================
+
 
 UNION ALL
 
@@ -226,9 +211,7 @@ FROM users
 WHERE email = 'sgmb.souksebt@smartqueue.ma'
 
 
--- =========================================================
--- SERVICES CLINIQUE SOUK SEBT
--- =========================================================
+
 
 UNION ALL
 
@@ -249,9 +232,7 @@ FROM users
 WHERE email = 'clinique.souksebt@smartqueue.ma'
 
 
--- =========================================================
--- SERVICES CLINIQUE AL AMAL
--- =========================================================
+
 
 UNION ALL
 

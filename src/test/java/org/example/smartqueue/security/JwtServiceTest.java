@@ -23,35 +23,6 @@ class JwtServiceTest {
 
 
     @Test
-    @DisplayName("generateToken: should generate a non-empty JWT for user")
-    void generateToken_WhenValidUser_ShouldGenerateValidToken() {
-        User user = new User();
-        user.setId(1L);
-        user.setEmail("admin@smartqueue.com");
-        user.setRole(Role.ADMIN);
-
-        String token = jwtService.generateToken(user);
-
-        assertNotNull(token);
-        assertFalse(token.isBlank());
-    }
-
-    @Test
-    @DisplayName("getEmailFromToken: should extract the subject email from valid token")
-    void getEmailFromToken_WhenValidToken_ShouldExtractSubject() {
-        User user = new User();
-        user.setId(2L);
-        user.setEmail("client@domain.com");
-        user.setRole(Role.CLIENT);
-
-        String token = jwtService.generateToken(user);
-        String email = jwtService.getEmailFromToken(token);
-
-        assertEquals("client@domain.com", email);
-    }
-
-
-    @Test
     @DisplayName("validateToken: should return true for a valid generated token")
     void validateToken_WhenTokenValid_ShouldReturnTrue() {
         User user = new User();

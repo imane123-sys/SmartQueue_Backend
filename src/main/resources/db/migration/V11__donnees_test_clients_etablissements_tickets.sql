@@ -1,12 +1,4 @@
--- =============================================================================
--- MIGRATION V11 : DONNÉES DE TEST (ÉTABLISSEMENTS, CLIENTS, SERVICES, TICKETS)
--- MOT DE PASSE POUR TOUS LES UTILISATEURS (Clair) : 200585
--- Hash BCrypt ($2a$10) : $2a$10$EKG3Ugx82Oe.k74tnjGrKOkfFUXlOCl2NAyCQUvq6.7MdUxTtACq.
--- =============================================================================
 
--- =============================================================================
--- 1. INSERTION DES NOUVEAUX ÉTABLISSEMENTS DANS LA TABLE USERS
--- =============================================================================
 INSERT IGNORE INTO users (nom, prenom, email, password, role)
 VALUES
 (
@@ -31,9 +23,7 @@ VALUES
     'ETABLISSEMENT'
 );
 
--- =============================================================================
--- 2. INSERTION DANS LA TABLE ETABLISSEMENTS
--- =============================================================================
+
 INSERT IGNORE INTO etablissements (id, adresse, telephone, type, latitude, longitude, rayon_km, horaire_ouverture, horaire_fermeture)
 SELECT id, 'Boulevard Mohammed V, Béni Mellal', '0523481122', 'Télécommunication', 32.3372, -6.3495, 30.0, '08:30:00', '18:30:00'
 FROM users WHERE email = 'maroctelecom.bm@smartqueue.ma'
@@ -44,18 +34,13 @@ UNION ALL
 SELECT id, 'Quartier Administratif, Béni Mellal', '0523485566', 'Service Public', 32.3355, -6.3520, 30.0, '08:30:00', '16:30:00'
 FROM users WHERE email = 'radeet.benimellal@smartqueue.ma';
 
--- =============================================================================
--- 3. INSERTION DES SERVICES POUR CES ÉTABLISSEMENTS
--- =============================================================================
 INSERT INTO services (nom, description, duree_moyenne, etablissement_id)
--- Services Maroc Telecom
 SELECT 'Abonnement & Facturation', 'Gestion des forfaits mobiles, fibre optique et paiement factures', 15, id
 FROM users WHERE email = 'maroctelecom.bm@smartqueue.ma'
 UNION ALL
 SELECT 'Support Technique & SAV', 'Assistance technique box internet et cartes SIM défectueuses', 20, id
 FROM users WHERE email = 'maroctelecom.bm@smartqueue.ma'
 
--- Services CTM
 UNION ALL
 SELECT 'Billetterie Voyage', 'Achat, modification et réservation de billets d autocar', 10, id
 FROM users WHERE email = 'ctm.benimellal@smartqueue.ma'
@@ -63,7 +48,6 @@ UNION ALL
 SELECT 'Envoi & Retrait Colis', 'Dépôt et réception des colis messagerie express', 15, id
 FROM users WHERE email = 'ctm.benimellal@smartqueue.ma'
 
--- Services RADEET
 UNION ALL
 SELECT 'Paiement Factures', 'Règlement des factures d eau et d électricité', 10, id
 FROM users WHERE email = 'radeet.benimellal@smartqueue.ma'
@@ -71,9 +55,7 @@ UNION ALL
 SELECT 'Nouveau Raccordement & Réclamations', 'Demande de compteur, abonnement et réclamations techniques', 25, id
 FROM users WHERE email = 'radeet.benimellal@smartqueue.ma';
 
--- =============================================================================
--- 4. INSERTION DES CLIENTS DE TEST DANS LA TABLE USERS
--- =============================================================================
+
 INSERT IGNORE INTO users (nom, prenom, email, password, role)
 VALUES
     ('Bennani',  'Hamza',    'hamza.bennani@test.ma',    '$2a$10$EKG3Ugx82Oe.k74tnjGrKOkfFUXlOCl2NAyCQUvq6.7MdUxTtACq.', 'CLIENT'),
@@ -82,9 +64,7 @@ VALUES
     ('Tahiri',   'Khadija',  'khadija.tahiri@test.ma',   '$2a$10$EKG3Ugx82Oe.k74tnjGrKOkfFUXlOCl2NAyCQUvq6.7MdUxTtACq.', 'CLIENT'),
     ('Chraibi',  'Rachid',   'rachid.chraibi@test.ma',   '$2a$10$EKG3Ugx82Oe.k74tnjGrKOkfFUXlOCl2NAyCQUvq6.7MdUxTtACq.', 'CLIENT');
 
--- =============================================================================
--- 5. INSERTION DANS LA TABLE CLIENTS
--- =============================================================================
+
 INSERT IGNORE INTO clients (id, telephone)
 SELECT id, '0612345609' FROM users WHERE email = 'hamza.bennani@test.ma'
 UNION ALL
@@ -96,14 +76,7 @@ SELECT id, '0612345612' FROM users WHERE email = 'khadija.tahiri@test.ma'
 UNION ALL
 SELECT id, '0612345613' FROM users WHERE email = 'rachid.chraibi@test.ma';
 
--- =============================================================================
--- 6. INSERTION DES TICKETS AVEC DIFFÉRENTS STATUTS (EN_ATTENTE, EN_COURS, TERMINE, ABSENT)
--- =============================================================================
 
--- -----------------------------------------------------------------------------
--- Tickets pour Maroc Telecom - Service "Abonnement & Facturation"
--- -----------------------------------------------------------------------------
--- Ticket 1 (EN_COURS)
 INSERT INTO tickets (numero, date_creation, qr_code, position, temps_estime, statut, client_id, service_id)
 SELECT
     1,
@@ -120,7 +93,6 @@ WHERE u.email = 'maroctelecom.bm@smartqueue.ma'
   AND s.nom = 'Abonnement & Facturation'
 LIMIT 1;
 
--- Ticket 2 (EN_ATTENTE)
 INSERT INTO tickets (numero, date_creation, qr_code, position, temps_estime, statut, client_id, service_id)
 SELECT
     2,
@@ -137,7 +109,6 @@ WHERE u.email = 'maroctelecom.bm@smartqueue.ma'
   AND s.nom = 'Abonnement & Facturation'
 LIMIT 1;
 
--- Ticket 3 (EN_ATTENTE)
 INSERT INTO tickets (numero, date_creation, qr_code, position, temps_estime, statut, client_id, service_id)
 SELECT
     3,
@@ -154,10 +125,7 @@ WHERE u.email = 'maroctelecom.bm@smartqueue.ma'
   AND s.nom = 'Abonnement & Facturation'
 LIMIT 1;
 
--- -----------------------------------------------------------------------------
--- Tickets pour Maroc Telecom - Service "Support Technique & SAV"
--- -----------------------------------------------------------------------------
--- Ticket 1 (TERMINE)
+
 INSERT INTO tickets (numero, date_creation, qr_code, position, temps_estime, statut, client_id, service_id)
 SELECT
     1,
@@ -174,7 +142,6 @@ WHERE u.email = 'maroctelecom.bm@smartqueue.ma'
   AND s.nom = 'Support Technique & SAV'
 LIMIT 1;
 
--- Ticket 2 (EN_ATTENTE)
 INSERT INTO tickets (numero, date_creation, qr_code, position, temps_estime, statut, client_id, service_id)
 SELECT
     2,
@@ -191,10 +158,7 @@ WHERE u.email = 'maroctelecom.bm@smartqueue.ma'
   AND s.nom = 'Support Technique & SAV'
 LIMIT 1;
 
--- -----------------------------------------------------------------------------
--- Tickets pour CTM Messagerie & Voyage - Service "Billetterie Voyage"
--- -----------------------------------------------------------------------------
--- Ticket 1 (EN_COURS)
+
 INSERT INTO tickets (numero, date_creation, qr_code, position, temps_estime, statut, client_id, service_id)
 SELECT
     1,
@@ -211,7 +175,6 @@ WHERE u.email = 'ctm.benimellal@smartqueue.ma'
   AND s.nom = 'Billetterie Voyage'
 LIMIT 1;
 
--- Ticket 2 (ABSENT)
 INSERT INTO tickets (numero, date_creation, qr_code, position, temps_estime, statut, client_id, service_id)
 SELECT
     2,
@@ -228,7 +191,6 @@ WHERE u.email = 'ctm.benimellal@smartqueue.ma'
   AND s.nom = 'Billetterie Voyage'
 LIMIT 1;
 
--- Ticket 3 (EN_ATTENTE)
 INSERT INTO tickets (numero, date_creation, qr_code, position, temps_estime, statut, client_id, service_id)
 SELECT
     3,
@@ -245,10 +207,7 @@ WHERE u.email = 'ctm.benimellal@smartqueue.ma'
   AND s.nom = 'Billetterie Voyage'
 LIMIT 1;
 
--- -----------------------------------------------------------------------------
--- Tickets pour RADEET - Service "Paiement Factures"
--- -----------------------------------------------------------------------------
--- Ticket 1 (TERMINE)
+
 INSERT INTO tickets (numero, date_creation, qr_code, position, temps_estime, statut, client_id, service_id)
 SELECT
     1,
@@ -265,7 +224,6 @@ WHERE u.email = 'radeet.benimellal@smartqueue.ma'
   AND s.nom = 'Paiement Factures'
 LIMIT 1;
 
--- Ticket 2 (EN_COURS)
 INSERT INTO tickets (numero, date_creation, qr_code, position, temps_estime, statut, client_id, service_id)
 SELECT
     2,

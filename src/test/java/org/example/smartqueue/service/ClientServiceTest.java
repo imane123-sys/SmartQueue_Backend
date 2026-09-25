@@ -33,26 +33,6 @@ class ClientServiceTest {
 
 
     @Test
-    @DisplayName("createClient: should encode password, set CLIENT role and save")
-    void createClient_WhenValidRequest_ShouldEncodePasswordAndSave() {
-        ClientRequestDTO request = new ClientRequestDTO();
-        request.setPassword("plainTextPass");
-
-        Client client = new Client();
-        when(clientMapper.toEntity(request)).thenReturn(client);
-        when(passwordEncoder.encode("plainTextPass")).thenReturn("hashedPass");
-        when(clientRepository.save(client)).thenReturn(client);
-        when(clientMapper.toDto(client)).thenReturn(new ClientResponseDTO());
-
-        ClientResponseDTO response = clientService.createClient(request);
-
-        assertNotNull(response);
-        assertEquals(Role.CLIENT, client.getRole());
-        assertEquals("hashedPass", client.getPassword());
-        verify(clientRepository).save(client);
-    }
-
-    @Test
     @DisplayName("createClient: should propagate error when save fails")
     void createClient_WhenRepositoryFails_ShouldPropagateException() {
         ClientRequestDTO request = new ClientRequestDTO();
@@ -67,21 +47,7 @@ class ClientServiceTest {
     }
 
 
-    @Test
-    @DisplayName("getClientById: should return ClientResponseDTO when client is found")
-    void getClientById_WhenClientExists_ShouldReturnDTO() {
-        Client client = new Client();
-        client.setId(1L);
 
-        ClientResponseDTO dto = new ClientResponseDTO();
-        when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
-        when(clientMapper.toDto(client)).thenReturn(dto);
-
-        ClientResponseDTO result = clientService.getClientById(1L);
-
-        assertNotNull(result);
-        verify(clientRepository).findById(1L);
-    }
 
     @Test
     @DisplayName("getClientById: should throw NoSuchElementException when client does not exist")

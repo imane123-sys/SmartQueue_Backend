@@ -1,6 +1,4 @@
--- =========================================================
--- 1. INSERTION DANS LA TABLE USERS (NOUVEAUX ETABLISSEMENTS A BENI MELLAL)
--- =========================================================
+
 INSERT INTO users (nom, email, password, role)
 VALUES
 (
@@ -59,20 +57,14 @@ UNION ALL
 SELECT id, 'Route de Marrakech, Béni Mellal', '0523487000', 'Clinique', 32.3315, -6.3580, 10.0, '08:00:00', '19:00:00'
 FROM users WHERE email = 'clinique.ibnsina@smartqueue.ma';
 
--- =========================================================
--- 3. INSERTION DANS LA TABLE SERVICES
--- Mêmes services proposés ('Services bancaires', 'Retrait bancaire', 'Consultation médicale', 'Urgences')
--- pour tester la recherche et l'affichage d'une liste d'établissements proches offrant le même service
--- =========================================================
+
 INSERT INTO services (nom, description, duree_moyenne, etablissement_id)
--- Services pour Attijariwafa Bank
 SELECT 'Services bancaires', 'Opérations bancaires courantes et virements', 15, id
 FROM users WHERE email = 'attijari.benimellal@smartqueue.ma'
 UNION ALL
 SELECT 'Retrait bancaire', 'Retrait d’espèces au guichet', 10, id
 FROM users WHERE email = 'attijari.benimellal@smartqueue.ma'
 
--- Services pour CIH Bank
 UNION ALL
 SELECT 'Services bancaires', 'Opérations bancaires et gestion de compte', 15, id
 FROM users WHERE email = 'cih.benimellal@smartqueue.ma'
@@ -80,7 +72,6 @@ UNION ALL
 SELECT 'Retrait bancaire', 'Retrait d’espèces au guichet', 10, id
 FROM users WHERE email = 'cih.benimellal@smartqueue.ma'
 
--- Services pour Crédit Agricole du Maroc
 UNION ALL
 SELECT 'Services bancaires', 'Opérations bancaires et financement agricole', 15, id
 FROM users WHERE email = 'creditagricole.bm@smartqueue.ma'
@@ -88,7 +79,6 @@ UNION ALL
 SELECT 'Retrait bancaire', 'Retrait d’espèces et opérations courantes', 10, id
 FROM users WHERE email = 'creditagricole.bm@smartqueue.ma'
 
--- Services pour Société Générale
 UNION ALL
 SELECT 'Services bancaires', 'Services et conseil bancaire', 15, id
 FROM users WHERE email = 'sgmb.benimellal@smartqueue.ma'
@@ -96,7 +86,6 @@ UNION ALL
 SELECT 'Retrait bancaire', 'Retrait d’espèces et change', 10, id
 FROM users WHERE email = 'sgmb.benimellal@smartqueue.ma'
 
--- Services pour Clinique Atlas
 UNION ALL
 SELECT 'Consultation médicale', 'Consultation médicale générale et spécialisée', 20, id
 FROM users WHERE email = 'clinique.atlas@smartqueue.ma'
@@ -104,7 +93,6 @@ UNION ALL
 SELECT 'Urgences', 'Service d’urgences 24/7', 30, id
 FROM users WHERE email = 'clinique.atlas@smartqueue.ma'
 
--- Services pour Clinique Ibn Sina
 UNION ALL
 SELECT 'Consultation médicale', 'Consultation médicale générale et spécialisée', 20, id
 FROM users WHERE email = 'clinique.ibnsina@smartqueue.ma'

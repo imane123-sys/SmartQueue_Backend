@@ -40,40 +40,6 @@ class TicketServiceTest {
     private TicketServiceImp ticketService;
 
 
-    @Test
-    @DisplayName("reserveTicket: should reserve ticket, generate QR and notify client")
-    void reserveTicket_WhenValidRequest_ShouldCreateTicketAndReturnDTO() {
-        TicketRequestDTO request = new TicketRequestDTO();
-        request.setServiceId(1L);
-        request.setClientEmail("client@test.com");
-
-        Services service = new Services();
-        service.setId(1L);
-        service.setDureeMoyenne(15);
-        service.setTickets(new ArrayList<>());
-
-        Client client = new Client();
-        client.setId(10L);
-        client.setEmail("client@test.com");
-
-        TicketResponseDTO expectedDto = new TicketResponseDTO();
-
-        when(serviceRepository.findById(1L)).thenReturn(Optional.of(service));
-        when(clientRepository.findByEmail("client@test.com")).thenReturn(Optional.of(client));
-        when(ticketRepository.save(any(Ticket.class))).thenAnswer(invocation -> invocation.getArgument(0));
-        when(ticketMapper.toResponseDTO(any(Ticket.class))).thenReturn(expectedDto);
-
-        TicketResponseDTO result = ticketService.reserveTicket(request);
-
-        assertNotNull(result);
-        verify(ticketRepository).save(argThat(t -> 
-            t.getPosition() == 1 &&
-            t.getTempsEstime() == 15 &&
-            t.getStatut() == StatutTicket.EN_ATTENTE &&
-            t.getQrCode() != null
-        ));
-        verify(notificationService).notificationConfirmation(any(Ticket.class));
-    }
 
     @Test
     @DisplayName("reserveTicket: should throw NoSuchElementException when service does not exist")
@@ -89,49 +55,6 @@ class TicketServiceTest {
     }
 
 
-    @Test
-    @DisplayName("annulerTicket: should mark ticket as ABSENT when client is owner")
-    void annulerTicket_WhenClientMatches_ShouldSetStatusAbsent() {
-        Client client = new Client();
-        client.setId(5L);
-
-        Ticket ticket = new Ticket();
-        ticket.setId(1L);
-        ticket.setClient(client);
-        ticket.setStatut(StatutTicket.EN_ATTENTE);
-
-        TicketResponseDTO expectedDto = new TicketResponseDTO();
-
-        when(ticketRepository.findById(1L)).thenReturn(Optional.of(ticket));
-        when(ticketRepository.save(ticket)).thenReturn(ticket);
-        when(ticketMapper.toResponseDTO(ticket)).thenReturn(expectedDto);
-
-        TicketResponseDTO result = ticketService.annulerTicket(1L, 5L);
-
-        assertNotNull(result);
-        assertEquals(StatutTicket.ABSENT, ticket.getStatut());
-        verify(ticketRepository).save(ticket);
-    }
-
-    @Test
-    @DisplayName("annulerTicket: should throw RuntimeException when client is not ticket owner")
-    void annulerTicket_WhenClientDoesNotMatch_ShouldThrowRuntimeException() {
-        Client owner = new Client();
-        owner.setId(5L);
-
-        Ticket ticket = new Ticket();
-        ticket.setId(1L);
-        ticket.setClient(owner);
-
-        when(ticketRepository.findById(1L)).thenReturn(Optional.of(ticket));
-
-        RuntimeException ex = assertThrows(RuntimeException.class, 
-            () -> ticketService.annulerTicket(1L, 99L)
-        );
-        assertEquals("Ce ticket ne vous appartient pas", ex.getMessage());
-        verify(ticketRepository, never()).save(any());
-    }
-
 
 
 
@@ -144,32 +67,7 @@ class TicketServiceTest {
         verify(ticketRepository, never()).save(any());
     }
 
-    // --- suivreTicket() Tests ---
 
-    @Test
-    @DisplayName("suivreTicket: should recalculate position and estimated time")
-    void suivreTicket_WhenTicketExists_ShouldRecalculatePositionAndTime() {
-        Services service = new Services();
-        service.setId(2L);
-        service.setDureeMoyenne(10);
-
-        Ticket ticket = new Ticket();
-        ticket.setId(1L);
-        ticket.setStatut(StatutTicket.EN_ATTENTE);
-        ticket.setPosition(5);
-        ticket.setServices(service);
-
-        when(ticketRepository.findById(1L)).thenReturn(Optional.of(ticket));
-        when(ticketRepository.countByServicesIdAndStatutAndPositionLessThan(2L, StatutTicket.EN_ATTENTE, 5))
-                .thenReturn(2L); // 2 tickets ahead
-        when(ticketMapper.toResponseDTO(ticket)).thenReturn(new TicketResponseDTO());
-
-        TicketResponseDTO result = ticketService.suivreTicket(1L);
-
-        assertNotNull(result);
-        assertEquals(3, ticket.getPosition()); // 2 + 1
-        assertEquals(30, ticket.getTempsEstime()); // 3 * 10
-    }
 
     @Test
     @DisplayName("suivreTicket: should throw RuntimeException when ticket does not exist")

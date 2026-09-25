@@ -1,13 +1,8 @@
--- =========================================================
--- 1. INSERTION DANS LA TABLE ADMIN
--- L'administrateur a été créé dans la migration V3 (dans la table users)
--- =========================================================
+
 INSERT INTO admin (id)
 SELECT id FROM users WHERE email = 'imaneramadane@gmail.com';
 
--- =========================================================
--- 2. INSERTION DANS LA TABLE USERS (ETABLISSEMENTS)
--- =========================================================
+
 INSERT INTO users (nom, email, password, role)
 VALUES
 (
@@ -41,11 +36,7 @@ VALUES
     'ETABLISSEMENT'
 );
 
--- =========================================================
--- 3. INSERTION DANS LA TABLE ETABLISSEMENTS
--- L'id fait référence à users(id) via l'email
--- Note : rayon_km sera ajouté dans la migration V5 avec une valeur par défaut de 10.0
--- =========================================================
+
 INSERT INTO etablissements (id, adresse, telephone, type, latitude, longitude, horaire_ouverture, horaire_fermeture)
 SELECT id, 'Avenue Chohadaa, Béni Mellal', '0523483805', 'ETABLISSEMENT', 32.33420181, -6.35333014, '08:00:00', '18:00:00'
 FROM users WHERE email = 'chr.benimellal@smartqueue.ma'

@@ -1,6 +1,4 @@
--- =========================================================
--- 1. CLIENTS DE TEST (INSERT IGNORE : deja existants en base)
--- =========================================================
+
 INSERT IGNORE INTO users (nom, prenom, email, password, role)
 VALUES
     ('Alami',  'Youssef', 'youssef.alami@test.ma', '$2a$10$7EqJtq98hPqEX7fNZaFWoO5Y7f6j7mW6mV7L9K6z7W9Y4z7n2mQ7e', 'CLIENT'),
@@ -24,9 +22,7 @@ UNION ALL
 SELECT 'Conseil pharmaceutique', 'Conseil et orientation par le pharmacien', 15, id
 FROM users WHERE email = 'pharmacie@gmail.com';
 
--- =========================================================
--- 3. TICKETS POUR LA PHARMACIE
--- =========================================================
+
 
 -- Retrait ordonnance - Ticket 1
 INSERT INTO tickets (numero, date_creation, qr_code, position, temps_estime, statut, client_id, service_id)
@@ -45,7 +41,6 @@ WHERE u.email = 'pharmacie@gmail.com'
   AND s.nom = 'Retrait ordonnance'
 LIMIT 1;
 
--- Retrait ordonnance - Ticket 2
 INSERT INTO tickets (numero, date_creation, qr_code, position, temps_estime, statut, client_id, service_id)
 SELECT
     2,
@@ -79,7 +74,6 @@ WHERE u.email = 'pharmacie@gmail.com'
   AND s.nom = 'Retrait ordonnance'
 LIMIT 1;
 
--- Conseil pharmaceutique - Ticket 1
 INSERT INTO tickets (numero, date_creation, qr_code, position, temps_estime, statut, client_id, service_id)
 SELECT
     1,
@@ -96,7 +90,6 @@ WHERE u.email = 'pharmacie@gmail.com'
   AND s.nom = 'Conseil pharmaceutique'
 LIMIT 1;
 
--- Conseil pharmaceutique - Ticket 2
 INSERT INTO tickets (numero, date_creation, qr_code, position, temps_estime, statut, client_id, service_id)
 SELECT
     2,

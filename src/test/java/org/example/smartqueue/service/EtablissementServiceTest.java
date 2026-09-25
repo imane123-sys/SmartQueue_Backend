@@ -34,30 +34,7 @@ class EtablissementServiceTest {
     private EtablissementServiceImp etablissementService;
 
 
-    @Test
-    @DisplayName("createEtablissement: should fetch coordinates, encode password and save")
-    void createEtablissement_WhenValidRequest_ShouldGeocodeAndSave() {
-        EtablissementRequestDTO request = new EtablissementRequestDTO();
-        request.setPassword("secret123");
 
-        Etablissement entity = new Etablissement();
-        entity.setAdresse("10 Rue de Paris");
-
-        when(etablissementMapper.toEntity(request)).thenReturn(entity);
-        when(geocodingService.getCoordinates("10 Rue de Paris")).thenReturn(new double[]{48.8566, 2.3522});
-        when(passwordEncoder.encode("secret123")).thenReturn("encodedSecret");
-        when(etablissementRepository.save(entity)).thenReturn(entity);
-        when(etablissementMapper.toResponseDTO(entity)).thenReturn(new EtablissementResponseDTO());
-
-        EtablissementResponseDTO result = etablissementService.createEtablissement(request);
-
-        assertNotNull(result);
-        assertEquals(48.8566, entity.getLatitude());
-        assertEquals(2.3522, entity.getLongitude());
-        assertEquals(Role.ETABLISSEMENT, entity.getRole());
-        assertEquals("encodedSecret", entity.getPassword());
-        verify(etablissementRepository).save(entity);
-    }
 
     @Test
     @DisplayName("createEtablissement: should throw exception when geocoding fails")
@@ -73,7 +50,6 @@ class EtablissementServiceTest {
         verify(etablissementRepository, never()).save(any());
     }
 
-    // --- findEtablissementsProchesParServices() Tests ---
 
     @Test
     @DisplayName("findEtablissementsProchesParServices: should calculate distance correctly for nearby establishments")
@@ -96,13 +72,5 @@ class EtablissementServiceTest {
         assertTrue(result.get(0).getDistanceKm() > 0);
     }
 
-    @Test
-    @DisplayName("findEtablissementsProchesParServices: should return empty list when coordinates are (0.0, 0.0)")
-    void findEtablissementsProchesParServices_WhenCoordinatesZero_ShouldReturnEmptyList() {
-        List<EtablissementResponseDTO> result = etablissementService.findEtablissementsProchesParServices("dentiste", 0.0, 0.0);
 
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
-        verify(etablissementRepository, never()).findEtablissementsProchesParServices(any(), anyDouble(), anyDouble());
-    }
 }

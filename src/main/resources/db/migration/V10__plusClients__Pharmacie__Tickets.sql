@@ -1,5 +1,5 @@
 
--- Password pour tous les utilisateurs : 200585
+-- 200585
 INSERT IGNORE INTO users (nom, prenom, email, password, role)
 VALUES
     ('Tazi',    'Mehdi',    'mehdi.tazi@test.ma',     '$2a$10$EKG3Ugx82Oe.k74tnjGrKOkfFUXlOCl2NAyCQUvq6.7MdUxTtACq.', 'CLIENT'),
@@ -19,12 +19,7 @@ SELECT id, '0612345607' FROM users WHERE email = 'sara.mrani@test.ma'
 UNION ALL
 SELECT id, '0612345608' FROM users WHERE email = 'amine.chaoui@test.ma';
 
--- =========================================================
--- 2. NOUVEAUX TICKETS POUR LA PHARMACIE
---    Service : Retrait ordonnance
--- =========================================================
 
--- Retrait ordonnance - Ticket 4
 INSERT INTO tickets (numero, date_creation, qr_code, position, temps_estime, statut, client_id, service_id)
 SELECT
     4,
@@ -41,7 +36,6 @@ WHERE u.email = 'pharmacie@gmail.com'
   AND s.nom = 'Retrait ordonnance'
 LIMIT 1;
 
--- Retrait ordonnance - Ticket 5
 INSERT INTO tickets (numero, date_creation, qr_code, position, temps_estime, statut, client_id, service_id)
 SELECT
     5,
@@ -58,7 +52,6 @@ WHERE u.email = 'pharmacie@gmail.com'
   AND s.nom = 'Retrait ordonnance'
 LIMIT 1;
 
--- Retrait ordonnance - Ticket 6
 INSERT INTO tickets (numero, date_creation, qr_code, position, temps_estime, statut, client_id, service_id)
 SELECT
     6,
@@ -75,7 +68,6 @@ WHERE u.email = 'pharmacie@gmail.com'
   AND s.nom = 'Retrait ordonnance'
 LIMIT 1;
 
--- Retrait ordonnance - Ticket 7
 INSERT INTO tickets (numero, date_creation, qr_code, position, temps_estime, statut, client_id, service_id)
 SELECT
     7,
@@ -92,7 +84,6 @@ WHERE u.email = 'pharmacie@gmail.com'
   AND s.nom = 'Retrait ordonnance'
 LIMIT 1;
 
--- Retrait ordonnance - Ticket 8
 INSERT INTO tickets (numero, date_creation, qr_code, position, temps_estime, statut, client_id, service_id)
 SELECT
     8,
@@ -109,12 +100,7 @@ WHERE u.email = 'pharmacie@gmail.com'
   AND s.nom = 'Retrait ordonnance'
 LIMIT 1;
 
--- =========================================================
--- 3. NOUVEAUX TICKETS POUR LA PHARMACIE
---    Service : Conseil pharmaceutique
--- =========================================================
 
--- Conseil pharmaceutique - Ticket 3
 INSERT INTO tickets (numero, date_creation, qr_code, position, temps_estime, statut, client_id, service_id)
 SELECT
     3,
@@ -131,7 +117,6 @@ WHERE u.email = 'pharmacie@gmail.com'
   AND s.nom = 'Conseil pharmaceutique'
 LIMIT 1;
 
--- Conseil pharmaceutique - Ticket 4
 INSERT INTO tickets (numero, date_creation, qr_code, position, temps_estime, statut, client_id, service_id)
 SELECT
     4,
@@ -148,7 +133,6 @@ WHERE u.email = 'pharmacie@gmail.com'
   AND s.nom = 'Conseil pharmaceutique'
 LIMIT 1;
 
--- Conseil pharmaceutique - Ticket 5
 INSERT INTO tickets (numero, date_creation, qr_code, position, temps_estime, statut, client_id, service_id)
 SELECT
     5,
@@ -165,7 +149,6 @@ WHERE u.email = 'pharmacie@gmail.com'
   AND s.nom = 'Conseil pharmaceutique'
 LIMIT 1;
 
--- Conseil pharmaceutique - Ticket 6
 INSERT INTO tickets (numero, date_creation, qr_code, position, temps_estime, statut, client_id, service_id)
 SELECT
     6,
@@ -182,7 +165,6 @@ WHERE u.email = 'pharmacie@gmail.com'
   AND s.nom = 'Conseil pharmaceutique'
 LIMIT 1;
 
--- Conseil pharmaceutique - Ticket 7
 INSERT INTO tickets (numero, date_creation, qr_code, position, temps_estime, statut, client_id, service_id)
 SELECT
     7,
