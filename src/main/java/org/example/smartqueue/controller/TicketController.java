@@ -26,7 +26,7 @@ public class TicketController {
     private final TicketService ticketService;
 
     @PostMapping("/reserve")
-    @PreAuthorize("hasAnyAuthority('CLIENT','ADMIN')")
+    @PreAuthorize("hasAuthority('CLIENT')")
     public ResponseEntity<TicketResponseDTO> reserveTicket(
             @Valid @RequestBody TicketRequestDTO ticketRequestDTO) {
 
@@ -74,7 +74,7 @@ public class TicketController {
     }
 
     @PutMapping("/statut/{ticketid}")
-    @PreAuthorize("hasAnyAuthority('ETABLISSEMENT', 'ADMIN')")
+    @PreAuthorize("hasAuthority('ETABLISSEMENT')")
     public ResponseEntity<TicketResponseDTO> modifierStatut(
             @PathVariable long ticketid,
             @RequestParam StatutTicket nouveauStatut) {
@@ -120,5 +120,11 @@ public class TicketController {
 //     @PreAuthorize("hasAnyAuthority('CLIENT', 'ADMIN')")
      public ResponseEntity<TicketResponseDTO> updateTempsEstime(@PathVariable Long idTicket,@RequestParam int tempestime) {
          return ResponseEntity.ok(ticketService.modifierTempsEstime(idTicket,tempestime));
+     }
+
+     @GetMapping
+     @PreAuthorize("hasAuthority('ADMIN')")
+     public ResponseEntity<List<TicketResponseDTO>> getAllTickets() {
+         return ResponseEntity.ok(ticketService.getAllTickets());
      }
 }

@@ -54,4 +54,6 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     long countByServicesIdAndStatut(Long serviceId, StatutTicket statut);
 
+    List<Ticket> findAllByOrderByDateCreationDesc();
+
 }

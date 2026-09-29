@@ -46,7 +46,7 @@ public class EtablissementController {
     }
 
     @GetMapping("/proches")
-    @PreAuthorize("hasAnyAuthority('CLIENT', 'ADMIN')")
+    @PreAuthorize("hasAuthority('CLIENT')")
     public ResponseEntity<List<EtablissementResponseDTO>> findEtablissementsProchesParServices(
             @RequestParam String serviceNom,
             @RequestParam double latitude,

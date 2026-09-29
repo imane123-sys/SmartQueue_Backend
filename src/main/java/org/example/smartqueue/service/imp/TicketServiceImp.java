@@ -181,4 +181,9 @@ public class TicketServiceImp implements TicketService {
 
         return ticketMapper.toResponseDTO(ticket);
     }
+
+    @Override
+    public List<TicketResponseDTO> getAllTickets() {
+        return ticketMapper.toDTOList(ticketRepository.findAllByOrderByDateCreationDesc());
+    }
 }

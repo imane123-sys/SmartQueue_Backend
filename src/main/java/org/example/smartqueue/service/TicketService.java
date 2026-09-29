@@ -22,4 +22,5 @@ public interface TicketService {
      Page <TicketResponseDTO> getTicketsByEtablissmentid(StatutTicket statut ,Long id , Pageable pageable);
      List<TicketResponseDTO> getTicketsByClientId(Long clientId);
      TicketResponseDTO modifierTempsEstime(long idTicket,int tempsEstime);
+     List<TicketResponseDTO> getAllTickets();
 }
