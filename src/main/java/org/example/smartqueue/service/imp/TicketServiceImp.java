@@ -38,9 +38,10 @@ public class TicketServiceImp implements TicketService {
     private final TicketRepository ticketRepository;
     private final TicketMapper ticketMapper;
     private final NotificationService notificationService;
+
     @Override
     @Transactional
-     public TicketResponseDTO reserveTicket(TicketRequestDTO ticket){
+    public TicketResponseDTO reserveTicket(TicketRequestDTO ticket) {
         int nombre = ThreadLocalRandom.current().nextInt(1000, 10000);
         Ticket tickets = new Ticket();
         Services services = serviceRepository.findById(ticket.getServiceId()).get();
@@ -48,7 +49,7 @@ public class TicketServiceImp implements TicketService {
         tickets.setClient(clientRepository.findByEmail(ticket.getClientEmail()).get());
         tickets.setNumero(nombre);
         tickets.setDateCreation(LocalDateTime.now());
-        tickets.setPosition(services.getTickets().size()+1);
+        tickets.setPosition(services.getTickets().size() + 1);
         tickets.setStatut(StatutTicket.EN_ATTENTE);
 
         try {
@@ -59,7 +60,6 @@ public class TicketServiceImp implements TicketService {
         int duree = services.getDureeMoyenne() > 0 ? services.getDureeMoyenne() : 10;
 
 
-
         tickets.setTempsEstime(tickets.getPosition() * duree);
 
         Ticket savedTicket = ticketRepository.save(tickets);
@@ -68,6 +68,7 @@ public class TicketServiceImp implements TicketService {
         return ticketMapper.toResponseDTO(savedTicket);
 
     }
+
     @Override
     public String generateQR(String text) throws Exception {
         BitMatrix matrix = new MultiFormatWriter()
@@ -78,35 +79,39 @@ public class TicketServiceImp implements TicketService {
 
         return Base64.getEncoder().encodeToString(out.toByteArray());
     }
-@Override
-    public List<TicketResponseDTO> getTicketsEnAttente(StatutTicket statut ,String nomService){
-        return ticketMapper.toDTOList(ticketRepository.findByStatutAndServices_Nom(statut ,nomService));
+
+    @Override
+    public List<TicketResponseDTO> getTicketsEnAttente(StatutTicket statut, String nomService) {
+        return ticketMapper.toDTOList(ticketRepository.findByStatutAndServices_Nom(statut, nomService));
 
     }
+
     @Override
-    public TicketResponseDTO annulerTicket(long ticketid,long clientId){
-        Ticket ticket= ticketRepository.findById(ticketid).orElseThrow(()->new RuntimeException("ce ticket n'existe pas"));
-         if (ticket.getClient().getId() != clientId){
-             throw new RuntimeException("Ce ticket ne vous appartient pas");
-         }
+    public TicketResponseDTO annulerTicket(long ticketid, long clientId) {
+        Ticket ticket = ticketRepository.findById(ticketid).orElseThrow(() -> new RuntimeException("ce ticket n'existe pas"));
+        if (ticket.getClient().getId() != clientId) {
+            throw new RuntimeException("Ce ticket ne vous appartient pas");
+        }
         ticket.setStatut(StatutTicket.ABSENT);
-        Ticket ticket1= ticketRepository.save(ticket);
+        Ticket ticket1 = ticketRepository.save(ticket);
         return ticketMapper.toResponseDTO(ticket1);
 
     }
+
     @Override
-    public TicketResponseDTO appelerTicketSuivant(long serviceId){
-        Services services = serviceRepository.findById(serviceId).orElseThrow(()->new RuntimeException("ce service n'appartient pas à cet établissement"));
-        Ticket ticket = ticketRepository.findByServicesIdAndStatutOrderByPositionAsc(services.getId(),StatutTicket.EN_ATTENTE).get(0);
+    public TicketResponseDTO appelerTicketSuivant(long serviceId) {
+        Services services = serviceRepository.findById(serviceId).orElseThrow(() -> new RuntimeException("ce service n'appartient pas à cet établissement"));
+        Ticket ticket = ticketRepository.findByServicesIdAndStatutOrderByPositionAsc(services.getId(), StatutTicket.EN_ATTENTE).get(0);
         ticket.setStatut(StatutTicket.EN_COURS);
         Ticket saved = ticketRepository.save(ticket);
         notificationService.notificationUrTurn(saved.getId(), saved.getClient().getId(), saved);
         return ticketMapper.toResponseDTO(saved);
 
     }
+
     @Override
-    public TicketResponseDTO modifierStatut(long ticketid,StatutTicket nouveauStatut){
-        Ticket ticket= ticketRepository.findById(ticketid).orElseThrow(()->new RuntimeException("ce ticket n'existe pas"));
+    public TicketResponseDTO modifierStatut(long ticketid, StatutTicket nouveauStatut) {
+        Ticket ticket = ticketRepository.findById(ticketid).orElseThrow(() -> new RuntimeException("ce ticket n'existe pas"));
         ticket.setStatut(nouveauStatut);
         Ticket saved = ticketRepository.save(ticket);
         if (nouveauStatut == StatutTicket.EN_COURS) {
@@ -115,32 +120,34 @@ public class TicketServiceImp implements TicketService {
         return ticketMapper.toResponseDTO(saved);
 
     }
+
     @Override
-     public TicketResponseDTO getTicketById(long id){
-        Ticket ticket = ticketRepository.findById(id).orElseThrow(()->new RuntimeException("ce ticket n'existe pas"));
+    public TicketResponseDTO getTicketById(long id) {
+        Ticket ticket = ticketRepository.findById(id).orElseThrow(() -> new RuntimeException("ce ticket n'existe pas"));
         return ticketMapper.toResponseDTO(ticket);
 
     }
+
     @Override
-    public Map<String ,Long> getHistorique(long id){
-        Map<String,Long> status= new HashMap<>();
-        status.put("countStatut_EN_ATTENTE",ticketRepository.countTicketsEtablissemnt(id,StatutTicket.EN_ATTENTE));
-        status.put("countStatut_EN_COURS",ticketRepository.countTicketsEtablissemnt(id,StatutTicket.EN_COURS));
-        status.put("countStatut_TERMINE",ticketRepository.countTicketsEtablissemnt(id,StatutTicket.TERMINE));
-        status.put("countStatut_ABSENT",ticketRepository.countTicketsEtablissemnt(id,StatutTicket.ABSENT));
+    public Map<String, Long> getHistorique(long id) {
+        Map<String, Long> status = new HashMap<>();
+        status.put("countStatut_EN_ATTENTE", ticketRepository.countTicketsEtablissemnt(id, StatutTicket.EN_ATTENTE));
+        status.put("countStatut_EN_COURS", ticketRepository.countTicketsEtablissemnt(id, StatutTicket.EN_COURS));
+        status.put("countStatut_TERMINE", ticketRepository.countTicketsEtablissemnt(id, StatutTicket.TERMINE));
+        status.put("countStatut_ABSENT", ticketRepository.countTicketsEtablissemnt(id, StatutTicket.ABSENT));
         return status;
     }
 
-     @Override
-      public TicketResponseDTO modifierTempsEstime(long idTicket,int tempsEstime){
-         Ticket ticket= ticketRepository.findById(idTicket).orElseThrow(()->new RuntimeException("ce ticket n'existe pas"));
-         ticket.setTempsEstime(tempsEstime);
-         return ticketMapper.toResponseDTO(ticketRepository.save(ticket));
-     }
+    @Override
+    public TicketResponseDTO modifierTempsEstime(long idTicket, int tempsEstime) {
+        Ticket ticket = ticketRepository.findById(idTicket).orElseThrow(() -> new RuntimeException("ce ticket n'existe pas"));
+        ticket.setTempsEstime(tempsEstime);
+        return ticketMapper.toResponseDTO(ticketRepository.save(ticket));
+    }
 
-     @Override
-    public Page<TicketResponseDTO> getTicketsByEtablissmentid(StatutTicket statut,Long id , Pageable pageable){
-        Page<Ticket> tickets=ticketRepository.findByStatutAndServices_Etablissement_Id(StatutTicket.EN_ATTENTE,id,pageable);
+    @Override
+    public Page<TicketResponseDTO> getTicketsByEtablissmentid(StatutTicket statut, Long id, Pageable pageable) {
+        Page<Ticket> tickets = ticketRepository.findByStatutAndServices_Etablissement_Id(StatutTicket.EN_ATTENTE, id, pageable);
         return tickets.map(ticketMapper::toResponseDTO);
     }
 
@@ -148,6 +155,7 @@ public class TicketServiceImp implements TicketService {
     public List<TicketResponseDTO> getTicketsByClientId(Long clientId) {
         return ticketMapper.toDTOList(ticketRepository.findByClientIdOrderByDateCreationDesc(clientId));
     }
+
     @Override
     public TicketResponseDTO suivreTicket(long id) {
 

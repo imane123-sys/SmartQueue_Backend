@@ -67,7 +67,6 @@ public class EtablissementController {
                 etablissementService.getAllEtablissements(pageable));
 
     }
-// corriger probleme de modification
     @PutMapping("/update/{id}")
     @PreAuthorize("hasAnyAuthority('ETABLISSEMENT', 'ADMIN')")
     public ResponseEntity<EtablissementResponseDTO> updateEtablissement(
